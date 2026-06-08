@@ -199,7 +199,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .section-index {
   font-family: 'Space Mono', monospace;
   font-size: 0.65rem;
-  color: rgba(255,255,255,0.35);
+  color: #ffffff;
   letter-spacing: 3px;
 }
 
@@ -401,7 +401,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 
 .work-item-index {
   font-size: 0.65rem;
-  color: rgba(255,255,255,0.5);
+  color: #ffffff;
   letter-spacing: 2px;
   transition: color 0.3s ease;
 }
@@ -417,7 +417,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .work-item-tags {
   font-size: 0.65rem;
   letter-spacing: 2px;
-  color: rgba(255,255,255,0.55);
+  color:#ffffff;
   text-transform: uppercase;
   transition: color 0.3s ease;
   text-align: right;
