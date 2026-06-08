@@ -1,7 +1,7 @@
 /* --- Root Variables & Base --- */
 :root {
   --bg-color: #050505;
-  --text-primary: #f0f0f0;
+  --text-primary: #ffffff;
   --text-muted: #444444;
   --accent: #00ffcc;
   --header-height: 70px;
@@ -11,7 +11,6 @@
 body { background-color: var(--bg-color); color: var(--text-primary); font-family: 'Space Mono', monospace; overflow-x: hidden; }
 .foreground { position: relative; z-index: 10; }
 
-/* The Matrix Canvas strictly fixed behind */
 #matrix-bg {
   position: fixed;
   top: 0;
@@ -30,119 +29,118 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   height: var(--header-height);
   padding: 0;
   display: grid;
-  grid-template-columns: 180px 300px 1fr 70px 200px;
+  /* 4 Explicit Columns: Logo (200px) | Message (260px) | Nav (Fills space) | Config (200px) */
+  grid-template-columns: 200px 260px 1fr 200px; 
   background: rgba(5, 5, 5, 0.85);
   border-bottom: 1px solid var(--text-muted);
   mix-blend-mode: normal;
   backdrop-filter: blur(8px);
-  /* Start hidden for intro animation */
+  z-index: 200;
   transform: translateY(-100%); 
 }
 
 .header-segment {
   display: flex;
   align-items: center;
-  border-left: 1px solid var(--text-muted);
   height: 100%;
-  padding: 0 1rem;
-}
-.header-segment:first-child { border-left: none; }
-
-/* --- Logo Segment --- */
-.logo-segment { padding: 0 0.5rem; }
-.logo-segment a { display: flex; align-items: center; text-decoration: none; color: var(--text-primary); }
-
-
-.custom-ar-logo {
-  height: 32px; /* Scales the image down to perfectly fit the header bar */
-  width: auto;
-  margin-right: 0.8rem;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  padding: 0; 
 }
 
-/* Cyberpunk Hover Effect: Scales up and creates a neon glow using your theme color */
-.logo-segment a:hover .custom-ar-logo { 
-  transform: scale(1.1); 
-  filter: drop-shadow(0 0 8px var(--accent));
-}
-.logo-text { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-primary); margin-left: 2px; }
-
-/* --- Message Segment --- */
-.message-segment { font-size: 0.75rem; justify-content: flex-start; }
-#dynamic-messenger { width: 100%; text-align: left; background: transparent; border: none; padding: 0; color: var(--text-muted); cursor: default; }
-.typed-message { 
-  font-size: 0.75rem; 
-  text-transform: uppercase; 
-  color: var(--text-primary); /* Changed this line to make it white */
-}
-.cursor { color: var(--accent); animation: blink 1s step-end infinite; }
-@keyframes blink { 50% { opacity: 0; } }
-
-/* Shared text input style */
-.config-text-input {
-  border: 1px solid transparent;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-  font-size: 0.8rem;
-  font-family: 'Space Mono', monospace;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  background: transparent;
-  transition: border-color 0.3s ease, color 0.3s ease;
+/* Creates the vertical lines separating the blocks */
+.header-segment:not(:first-child) {
+  border-left: 1px solid var(--text-muted);
 }
 
-/* --- Nav Segment --- */
-.nav-segment { grid-column: 3; justify-content: center; }
-#centered-nav { display: flex; align-items: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
-#centered-nav a { color: var(--text-primary); text-decoration: none; margin: 0 1.5rem; transition: color 0.3s ease, transform 0.3s ease; }
-#centered-nav a:hover { color: var(--accent); transform: scale(1.05); }
-
-/* --- Stacked Social Segment --- */
-.social-segment {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-.social-link {
-  height: 50%;
+/* --- 1. Left: Logo Segment --- */
+.logo-segment { grid-column: 1; }
+.logo-wrapper { height: 100%; width: 100%; display: flex; align-items: center; }
+.logo-wrapper a {
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  height: 100%;
+  width: 100%;
+  padding: 0 1.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-.social-link:first-child { border-bottom: 1px solid var(--text-muted); }
-.social-link:hover { background-color: var(--accent); color: var(--bg-color); }
-.social-link svg { width: 18px; height: 18px; fill: currentColor; }
+.logo-wrapper a:hover { background-color: var(--accent); color: var(--bg-color); }
+.logo-wrapper a:hover .custom-ar-logo { filter: invert(1) brightness(0); }
 
-/* --- Config Segment --- */
-.config-segment { grid-column: 5; display: block; padding: 0; position: relative; }
+.custom-ar-logo {
+  height: 28px;
+  width: 28px; 
+  object-fit: contain;
+  margin-right: 0.8rem;
+  transition: filter 0.2s ease;
+}
+.logo-text { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+
+/* --- 2. Mid-Left: Message Segment --- */
+.message-segment { grid-column: 2; padding: 0 1.5rem; justify-content: flex-start; }
+#dynamic-messenger { width: 100%; text-align: left; background: transparent; border: none; padding: 0; cursor: default; }
+.typed-message { font-size: 0.8rem; text-transform: uppercase; color: var(--text-primary); }
+.cursor { color: var(--accent); animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* --- 3. Center: Nav Segment --- */
+.nav-segment { grid-column: 3; justify-content: center; }
+#centered-nav { display: flex; align-items: center; height: 100%; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
+
+#centered-nav a { 
+  color: var(--text-primary); 
+  text-decoration: none; 
+  height: 100%; 
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem; 
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease; 
+}
+#centered-nav a:hover { background-color: var(--accent); color: var(--bg-color); }
+
+.nav-social {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem !important;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.nav-social svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* --- 4. Right: Config Segment --- */
+.config-segment { grid-column: 4; }
 #sys-config-trigger {
   border: none;
   height: 100%;
-  padding: 0 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  padding: 0 1.5rem;
+  background: transparent;
   cursor: pointer;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-#sys-config-trigger:hover { color: var(--accent); }
-.trigger-text { letter-spacing: 1.5px; }
-.dropdown-arrow { 
-  font-size: 0.7rem; 
-  color: var(--text-primary); /* Changed this line to make it white */
-  transition: transform 0.3s ease; 
-}
+#sys-config-trigger:hover { background-color: var(--accent); color: var(--bg-color); }
+#sys-config-trigger:hover .dropdown-arrow { color: var(--bg-color); }
+.trigger-text { letter-spacing: 1.5px; margin-right: 0.5rem; }
+.dropdown-arrow { font-size: 0.7rem; color: var(--text-primary); transition: transform 0.3s ease; }
 #sys-config-trigger.active .dropdown-arrow { transform: rotate(180deg); }
 
+/* --- Hidden Dropdown Panel --- */
 .sys-config-panel {
   display: block;
   opacity: 1;
   transform: translateY(0);
   position: absolute;
-  top: 100%;
+  top: 100%; 
   right: 0;
   width: 250px;
   background: rgba(5, 5, 5, 0.95);
@@ -154,11 +152,7 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   font-size: 0.75rem;
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
 }
-.sys-config-panel.hidden {
-  opacity: 0;
-  transform: translateY(-10px);
-  visibility: hidden;
-}
+.sys-config-panel.hidden { opacity: 0; transform: translateY(-10px); visibility: hidden; }
 
 .control-group { margin-bottom: 1.2rem; display: flex; flex-direction: column; }
 .control-group label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-primary); }
