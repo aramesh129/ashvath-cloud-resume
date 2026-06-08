@@ -32,45 +32,110 @@ revealElements.forEach((el) => {
   });
 });
 
-// 3. Generative Canvas Background (The Flipping Grid)
+// 3. Generative Canvas Background & Config Menu
 const canvas = document.getElementById('matrix-bg');
 const ctx = canvas.getContext('2d');
 
-let cols, rows, grid;
-const fontSize = 18;
+// State Variables hooked to UI
+let dropSpeed = 1.0;
+let fontSize = 16;
+let themeColor = '#00ffcc';
+let baseColor = '#666666'; // Brightened up so it doesn't blend into the background
+let cols;
+let drops = [];
+let mouseX = -1000;
+let mouseY = -1000;
+
+// UI Elements
+const speedSlider = document.getElementById('speed-slider');
+const speedVal = document.getElementById('speed-val');
+const densitySlider = document.getElementById('density-slider');
+const densityVal = document.getElementById('density-val');
+const colorPicker = document.getElementById('color-picker');
+
+// UI Event Listeners
+speedSlider.addEventListener('input', (e) => {
+  dropSpeed = parseFloat(e.target.value);
+  speedVal.textContent = dropSpeed.toFixed(1);
+});
+
+densitySlider.addEventListener('input', (e) => {
+  fontSize = parseInt(e.target.value);
+  densityVal.textContent = fontSize;
+  resizeCanvas(); // Rebuild the grid when font size changes
+});
+
+colorPicker.addEventListener('input', (e) => {
+  themeColor = e.target.value;
+  // Update the CSS variable so the menu text/sliders match the new canvas color
+  document.documentElement.style.setProperty('--accent', themeColor);
+});
+
+// Mouse Tracking
+window.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+window.addEventListener('mouseout', () => {
+  mouseX = -1000;
+  mouseY = -1000;
+});
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   cols = Math.floor(canvas.width / fontSize) + 1;
-  rows = Math.floor(canvas.height / fontSize) + 1;
   
-  // Create a 2D array of random 1s and 0s
-  grid = Array.from({length: cols}, () => 
-    Array.from({length: rows}, () => Math.random() > 0.5 ? '1' : '0')
-  );
+  drops = [];
+  for(let i = 0; i < cols; i++) {
+    drops[i] = Math.random() * -100; 
+  }
 }
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function drawCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#444'; // Text color
-  ctx.font = fontSize + 'px monospace';
+  ctx.fillStyle = 'rgba(5, 5, 5, 0.1)'; 
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.font = fontSize + 'px "Space Mono", monospace';
   
-  for(let i = 0; i < cols; i++) {
-    for(let j = 0; j < rows; j++) {
-       // Randomly flip a tiny percentage of the bits every frame
-       if (Math.random() > 0.995) {
-           grid[i][j] = grid[i][j] === '1' ? '0' : '1';
-       }
-       ctx.fillText(grid[i][j], i * fontSize, j * fontSize);
+  for(let i = 0; i < drops.length; i++) {
+    const text = Math.random() > 0.5 ? '1' : '0';
+    const baseX = i * fontSize;
+    const baseY = drops[i] * fontSize;
+    
+    let drawX = baseX;
+    let drawY = baseY;
+
+    const dx = baseX - mouseX;
+    const dy = baseY - mouseY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    const radius = 150;
+    if (distance < radius) {
+      const force = (radius - distance) / radius;
+      drawX += (dx / distance) * force * 40; 
+      drawY += (dy / distance) * force * 40; 
+      
+      // Use the dynamically selected theme color
+      ctx.fillStyle = themeColor; 
+    } else {
+      // Use the brightened base color
+      ctx.fillStyle = baseColor;
     }
+    
+    ctx.fillText(text, drawX, drawY);
+    
+    if(baseY > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    
+    // Fall speed mapped to the slider
+    drops[i] += dropSpeed; 
   }
 }
 
-// Add canvas drawing to the main animation loop
 function renderLoop() {
   drawCanvas();
   requestAnimationFrame(renderLoop);
