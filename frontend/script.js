@@ -103,8 +103,6 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   
-  // Monospace fonts are narrower than they are tall. 
-  // Multiplier fixes horizontal gaps so the grid looks perfect.
   let charWidth = fontSize * 0.6; 
   cols = Math.floor(canvas.width / charWidth) + 1;
   rows = Math.floor(canvas.height / fontSize) + 1;
@@ -130,16 +128,14 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function drawCanvas() {
-  // Clear the canvas entirely every frame - prevents all smudging
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // 1. Calculate drop physics logic
+  // 1. Calculate drop physics
   for (let i = 0; i < cols; i++) {
     let oldY = Math.floor(drops[i]);
     drops[i] += dropSpeed;
     let newY = Math.floor(drops[i]);
     
-    // Light up crossed cells so rain never breaks at high speeds
     if (newY > oldY) {
       for (let y = oldY + 1; y <= newY; y++) {
         if (y >= 0 && y < rows && grid[i] && grid[i][y]) {
@@ -154,21 +150,18 @@ function drawCanvas() {
     }
   }
 
-  // Set font styling once per frame for performance
   let charWidth = fontSize * 0.6;
   ctx.font = fontSize + 'px "Space Mono", monospace';
   ctx.textBaseline = 'top';
 
-  // 2. Pass One: Calculate hover math and draw faint background cells
+  // 2. Compute Cursor Repulsion Math
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       let cell = grid[i][j];
       
-      // Gradually fade out the rain trail over time
       cell.intensity -= 0.015;
       if (cell.intensity < 0) cell.intensity = 0;
       
-      // Randomly glitch background characters
       if (Math.random() > 0.999) {
         cell.char = cell.char === '1' ? '0' : '1';
       }
@@ -185,34 +178,40 @@ function drawCanvas() {
       cell.drawX = baseX;
       cell.drawY = baseY;
       
-      if (distance < radius) {
+      // Added > 0.1 to prevent division by zero NaN errors at the exact cursor center
+      if (distance < radius && distance > 0.1) {
         cell.isHovered = true;
-        const force = (radius - distance) / radius;
-        cell.drawX += (dx / distance) * force * 40;
-        cell.drawY += (dy / distance) * force * 40;
+        // Used Math.pow to smooth the force curve so they don't bunch into a dense ring
+        const force = Math.pow((radius - distance) / radius, 1.2);
+        cell.drawX += (dx / distance) * force * 30;
+        cell.drawY += (dy / distance) * force * 30;
       }
-      
-      // Draw standard faint background cells immediately to save loops
-      if (!cell.isHovered && cell.intensity === 0) {
-        ctx.globalAlpha = 0.15;
-        ctx.fillStyle = '#444444';
+    }
+  }
+
+  // 3. Pass One: Draw Background Text (Stays muted, just moves out of the way)
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      let cell = grid[i][j];
+      if (cell.intensity === 0) {
+        // Slightly brighter if hovered, but strictly grey. NO CYAN!
+        ctx.globalAlpha = cell.isHovered ? 0.25 : 0.15;
+        ctx.fillStyle = cell.isHovered ? '#666666' : '#444444';
         ctx.fillText(cell.char, cell.drawX, cell.drawY);
       }
     }
   }
 
-  // 3. Pass Two: Draw the high-intensity rain trails and hovered cells on top
+  // 4. Pass Two: Draw Falling Rain (Only lights up cyan if it hits the cursor)
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       let cell = grid[i][j];
-      if (cell.isHovered || cell.intensity > 0) {
+      if (cell.intensity > 0) {
         if (cell.isHovered) {
           ctx.globalAlpha = 1.0;
-          ctx.fillStyle = themeColor;
+          ctx.fillStyle = themeColor; // This is the fix! Cyan only applies to rain drops now.
         } else {
-          // Fade alpha with intensity
           ctx.globalAlpha = 0.2 + (cell.intensity * 0.8);
-          // Only the very front of the drop gets the bright accent color
           ctx.fillStyle = cell.intensity > 0.8 ? themeColor : '#666666';
         }
         ctx.fillText(cell.char, cell.drawX, cell.drawY);
@@ -220,7 +219,6 @@ function drawCanvas() {
     }
   }
   
-  // Clean up canvas state
   ctx.globalAlpha = 1.0; 
 }
 
