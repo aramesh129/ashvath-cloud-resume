@@ -1,0 +1,115 @@
+:root {
+  --bg-color: #050505;
+  --text-primary: #f0f0f0;
+  --text-muted: #444444;
+  --accent: #00ffcc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Space Mono', monospace;
+  overflow-x: hidden;
+}
+
+/* The Matrix Canvas strictly fixed behind everything */
+#matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0.15; /* Keeps it subtle like Wodniack's site */
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+  z-index: 100;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  margin-left: 2rem;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 5vw;
+}
+
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(4rem, 12vw, 15rem);
+  line-height: 0.85;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.indent {
+  margin-left: 10vw;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--text-primary);
+}
+
+.eyebrow {
+  color: var(--accent);
+  margin-bottom: 2rem;
+}
+
+.subtitle {
+  margin-top: 3rem;
+  font-size: clamp(1rem, 2vw, 2rem);
+  max-width: 600px;
+}
+
+.content-section {
+  padding: 10vw 5vw;
+  min-height: 50vh;
+}
+
+.content-section h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.content-section p {
+  font-size: 1.5rem;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+.spacer {
+  height: 100vh; /* Just to allow scrolling for the demo */
+}
+
+/* Setup for GSAP animations */
+.gsap-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+}
