@@ -43,9 +43,17 @@ introTimeline.to('.main-header', {
 const scrollElements = document.querySelectorAll('.content-section .gsap-reveal');
 scrollElements.forEach((el) => {
   gsap.to(el, {
-    scrollTrigger: { trigger: el, start: "top 85%" },
+    scrollTrigger: { 
+      trigger: el, 
+      start: "top 85%",
+      // Add this exact line to control replay behavior
+      toggleActions: "play none none reverse" 
+    },
     clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-    opacity: 1, duration: 1.2, ease: premiumEase, stagger: 0.2
+    opacity: 1, 
+    duration: 1.2, 
+    ease: premiumEase, 
+    stagger: 0.2
   });
 });
 

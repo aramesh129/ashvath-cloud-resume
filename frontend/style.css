@@ -54,6 +54,8 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
 /* --- 1. Left: Logo Segment --- */
 .logo-segment { grid-column: 1; }
 .logo-wrapper { height: 100%; width: 100%; display: flex; align-items: center; }
+
+/* Controls the full-height hover block */
 .logo-wrapper a {
   display: flex;
   align-items: center;
@@ -62,21 +64,29 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   color: var(--text-primary);
   height: 100%;
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0; /* Removed excess padding so the logo can take up more space */
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
 .logo-wrapper a:hover { background-color: var(--accent); color: var(--bg-color); }
 .logo-wrapper a:hover .custom-ar-logo { filter: invert(1) brightness(0); }
 
+/* The Logo Image itself */
 .custom-ar-logo {
-  height: 28px;
-  width: 28px; 
+  height: 48px; /* Scales the logo up, but safely keeps it inside the 70px header */
+  width: auto;  /* Removes the hardcoded square width so your monogram scales perfectly */
   object-fit: contain;
-  margin-right: 0.8rem;
+  margin-right: 1rem;
   transition: filter 0.2s ease;
 }
-.logo-text { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
 
+.logo-text { 
+  font-size: 0.9rem; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  letter-spacing: 1.5px; 
+  white-space: nowrap; 
+}
 /* --- 2. Mid-Left: Message Segment --- */
 .message-segment { grid-column: 2; padding: 0 1.5rem; justify-content: flex-start; }
 #dynamic-messenger { width: 100%; text-align: left; background: transparent; border: none; padding: 0; cursor: default; }
