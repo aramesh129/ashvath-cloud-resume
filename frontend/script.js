@@ -46,7 +46,6 @@ scrollElements.forEach((el) => {
     scrollTrigger: { 
       trigger: el, 
       start: "top 85%",
-      // Add this exact line to control replay behavior
       toggleActions: "play none none reverse" 
     },
     clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
@@ -105,7 +104,6 @@ configTrigger.addEventListener('click', () => {
   configTrigger.classList.toggle('active'); 
 });
 
-// Close dropdown if clicked outside
 document.addEventListener('click', (e) => {
   if (!configTrigger.contains(e.target) && !configDropdown.contains(e.target)) {
     configDropdown.classList.add('hidden');
@@ -233,3 +231,110 @@ function renderLoop() {
   requestAnimationFrame(renderLoop);
 }
 renderLoop();
+
+
+// ═══════════════════════════════════════════
+//  SECTION ANIMATIONS
+// ═══════════════════════════════════════════
+
+// --- gsap-reveal-up: fade + slide up ---
+document.querySelectorAll('.gsap-reveal-up').forEach((el) => {
+  gsap.to(el, {
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 88%',
+      toggleActions: 'play none none reverse'
+    },
+    opacity: 1,
+    y: 0,
+    duration: 1.0,
+    ease: premiumEase,
+  });
+});
+
+// --- ABOUT: staggered children inside about-body ---
+gsap.utils.toArray('.about-body .gsap-reveal-up').forEach((el, i) => {
+  gsap.to(el, {
+    scrollTrigger: { trigger: '.about-body', start: 'top 80%', toggleActions: 'play none none reverse' },
+    opacity: 1,
+    y: 0,
+    duration: 1.0,
+    delay: i * 0.15,
+    ease: premiumEase,
+  });
+});
+
+// --- ABOUT: stat counter animation ---
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 1500;
+  const start = performance.now();
+  
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target);
+    if (progress < 1) requestAnimationFrame(tick);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(tick);
+}
+
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.stat-num').forEach(animateCounter);
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const statsEl = document.querySelector('.about-stats');
+if (statsEl) statObserver.observe(statsEl);
+
+// --- WORK: staggered slide-in from left ---
+gsap.utils.toArray('.work-item').forEach((item, i) => {
+  gsap.to(item, {
+    scrollTrigger: {
+      trigger: item,
+      start: 'top 90%',
+      toggleActions: 'play none none reverse',
+    },
+    opacity: 1,
+    x: 0,
+    rotate: 0,
+    duration: 0.8,
+    delay: i * 0.07,
+    ease: 'power3.out',
+  });
+});
+
+// --- WORK: magnetic tilt effect on hover ---
+document.querySelectorAll('.work-item').forEach(item => {
+  item.addEventListener('mousemove', (e) => {
+    const rect = item.getBoundingClientRect();
+    const relY = (e.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
+    gsap.to(item, {
+      skewX: relY * -3,
+      duration: 0.4,
+      ease: 'power2.out',
+      overwrite: 'auto',
+    });
+  });
+  item.addEventListener('mouseleave', () => {
+    gsap.to(item, { skewX: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)', overwrite: 'auto' });
+  });
+});
+
+// --- CONTACT: reveal-up stagger ---
+gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
+  gsap.to(el, {
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
+    opacity: 1,
+    y: 0,
+    duration: 1.0,
+    delay: i * 0.12,
+    ease: premiumEase,
+  });
+});
