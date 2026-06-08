@@ -18,13 +18,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Forces text and menus to sit safely above the canvas */
 .foreground {
   position: relative;
   z-index: 10; 
 }
 
-/* The Matrix Canvas strictly fixed behind text, but above the body background */
 #matrix-bg {
   position: fixed;
   top: 0;
@@ -32,7 +30,7 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 1;
-  pointer-events: none; /* Lets you click through it to menus */
+  pointer-events: none; 
 }
 
 nav {
@@ -46,6 +44,8 @@ nav {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  /* Start hidden above the screen for the drop-in animation */
+  transform: translateY(-100%); 
 }
 
 nav a {
@@ -72,7 +72,6 @@ h1 {
   line-height: 0.85;
   text-transform: uppercase;
   letter-spacing: -2px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .indent {
@@ -113,9 +112,10 @@ h1 {
   height: 100vh; 
 }
 
+/* Base state for all revealing elements - invisible squished line on the left */
 .gsap-reveal {
-  opacity: 0;
-  transform: translateY(50px);
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  opacity: 0; /* Fallback */
 }
 
 /* --- SYS_CONFIG Control Panel --- */
@@ -129,6 +129,8 @@ h1 {
   backdrop-filter: blur(8px);
   width: 250px;
   font-size: 0.8rem;
+  /* Start shifted off to the right */
+  transform: translateX(120%); 
 }
 
 .panel-header {
@@ -153,7 +155,6 @@ h1 {
   color: var(--text-primary);
 }
 
-/* Brutalist Sliders */
 input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
@@ -173,8 +174,6 @@ input[type="range"]::-webkit-slider-runnable-track {
   height: 2px;
   background: var(--text-muted);
 }
-
-/* Restored Native Color Picker for functionality */
 input[type="color"] {
   width: 100%;
   height: 35px;

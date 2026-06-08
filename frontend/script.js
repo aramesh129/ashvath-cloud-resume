@@ -16,36 +16,29 @@ requestAnimationFrame(raf);
 // 2. GSAP Wodniack-Style Animations
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom easing for that premium snappy feel
 const premiumEase = "power4.inOut";
-
-// Create the initial load timeline
 const introTimeline = gsap.timeline({ delay: 0.2 });
 
-// A. Reveal the Hero Text Left-to-Right
 introTimeline.to('.hero .gsap-reveal', {
   clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
   opacity: 1,
   duration: 1.5,
   ease: premiumEase,
-  stagger: 0.15 // Delays each line slightly
+  stagger: 0.15 
 });
 
-// B. Drop down the Navigation Bar
 introTimeline.to('nav', {
   y: 0,
   duration: 1.2,
   ease: premiumEase
-}, "-=1.0"); // Start 1 second before previous animation ends
+}, "-=1.0"); 
 
-// C. Slide in the Control Panel
 introTimeline.to('#control-panel', {
   x: 0,
   duration: 1.2,
   ease: premiumEase
 }, "-=1.0");
 
-// D. ScrollTrigger for elements further down the page (About section, etc.)
 const scrollElements = document.querySelectorAll('.content-section .gsap-reveal');
 scrollElements.forEach((el) => {
   gsap.to(el, {
@@ -61,8 +54,7 @@ scrollElements.forEach((el) => {
   });
 });
 
-
-// 3. Generative Canvas Background & Config Menu
+// 3. Generative Canvas Background (Fixed Grid Engine)
 const canvas = document.getElementById('matrix-bg');
 const ctx = canvas.getContext('2d');
 
@@ -75,8 +67,9 @@ const colorPicker = document.getElementById('color-picker');
 let dropSpeed = parseFloat(speedSlider.value);
 let fontSize = parseInt(densitySlider.value);
 let themeColor = colorPicker.value;
-let baseColor = '#555555'; 
-let cols;
+
+let cols, rows;
+let grid = [];
 let drops = [];
 let mouseX = -1000;
 let mouseY = -1000;
@@ -109,11 +102,27 @@ window.addEventListener('mouseout', () => {
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  cols = Math.floor(canvas.width / fontSize) + 1;
   
+  // Monospace fonts are narrower than they are tall. 
+  // Multiplier fixes horizontal gaps so the grid looks perfect.
+  let charWidth = fontSize * 0.6; 
+  cols = Math.floor(canvas.width / charWidth) + 1;
+  rows = Math.floor(canvas.height / fontSize) + 1;
+  
+  grid = [];
   drops = [];
   for(let i = 0; i < cols; i++) {
-    drops[i] = Math.random() * -100; 
+    grid[i] = [];
+    for(let j = 0; j < rows; j++) {
+      grid[i][j] = {
+        char: Math.random() > 0.5 ? '1' : '0',
+        intensity: 0,
+        drawX: 0,
+        drawY: 0,
+        isHovered: false
+      };
+    }
+    drops[i] = Math.random() * -rows; 
   }
 }
 
@@ -121,40 +130,98 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function drawCanvas() {
-  ctx.fillStyle = 'rgba(5, 5, 5, 0.15)'; 
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = fontSize + 'px "Space Mono", monospace';
+  // Clear the canvas entirely every frame - prevents all smudging
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  for(let i = 0; i < drops.length; i++) {
-    const text = Math.random() > 0.5 ? '1' : '0';
-    const baseX = i * fontSize;
-    const baseY = drops[i] * fontSize;
+  // 1. Calculate drop physics logic
+  for (let i = 0; i < cols; i++) {
+    let oldY = Math.floor(drops[i]);
+    drops[i] += dropSpeed;
+    let newY = Math.floor(drops[i]);
     
-    let drawX = baseX;
-    let drawY = baseY;
-
-    const dx = baseX - mouseX;
-    const dy = baseY - mouseY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    
-    const radius = 150;
-    if (distance < radius) {
-      const force = (radius - distance) / radius;
-      drawX += (dx / distance) * force * 40; 
-      drawY += (dy / distance) * force * 40; 
-      ctx.fillStyle = themeColor; 
-    } else {
-      ctx.fillStyle = baseColor;
+    // Light up crossed cells so rain never breaks at high speeds
+    if (newY > oldY) {
+      for (let y = oldY + 1; y <= newY; y++) {
+        if (y >= 0 && y < rows && grid[i] && grid[i][y]) {
+          grid[i][y].intensity = 1.0;
+          grid[i][y].char = Math.random() > 0.5 ? '1' : '0';
+        }
+      }
     }
     
-    ctx.fillText(text, drawX, drawY);
-    
-    if(baseY > canvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
+    if (drops[i] > rows && Math.random() > 0.95) {
+      drops[i] = Math.random() * -20; 
     }
-    
-    drops[i] += dropSpeed; 
   }
+
+  // Set font styling once per frame for performance
+  let charWidth = fontSize * 0.6;
+  ctx.font = fontSize + 'px "Space Mono", monospace';
+  ctx.textBaseline = 'top';
+
+  // 2. Pass One: Calculate hover math and draw faint background cells
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      let cell = grid[i][j];
+      
+      // Gradually fade out the rain trail over time
+      cell.intensity -= 0.015;
+      if (cell.intensity < 0) cell.intensity = 0;
+      
+      // Randomly glitch background characters
+      if (Math.random() > 0.999) {
+        cell.char = cell.char === '1' ? '0' : '1';
+      }
+      
+      let baseX = i * charWidth;
+      let baseY = j * fontSize;
+      
+      const dx = baseX - mouseX;
+      const dy = baseY - mouseY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const radius = 150;
+      
+      cell.isHovered = false;
+      cell.drawX = baseX;
+      cell.drawY = baseY;
+      
+      if (distance < radius) {
+        cell.isHovered = true;
+        const force = (radius - distance) / radius;
+        cell.drawX += (dx / distance) * force * 40;
+        cell.drawY += (dy / distance) * force * 40;
+      }
+      
+      // Draw standard faint background cells immediately to save loops
+      if (!cell.isHovered && cell.intensity === 0) {
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = '#444444';
+        ctx.fillText(cell.char, cell.drawX, cell.drawY);
+      }
+    }
+  }
+
+  // 3. Pass Two: Draw the high-intensity rain trails and hovered cells on top
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      let cell = grid[i][j];
+      if (cell.isHovered || cell.intensity > 0) {
+        if (cell.isHovered) {
+          ctx.globalAlpha = 1.0;
+          ctx.fillStyle = themeColor;
+        } else {
+          // Fade alpha with intensity
+          ctx.globalAlpha = 0.2 + (cell.intensity * 0.8);
+          // Only the very front of the drop gets the bright accent color
+          ctx.fillStyle = cell.intensity > 0.8 ? themeColor : '#666666';
+        }
+        ctx.fillText(cell.char, cell.drawX, cell.drawY);
+      }
+    }
+  }
+  
+  // Clean up canvas state
+  ctx.globalAlpha = 1.0; 
 }
 
 function renderLoop() {
