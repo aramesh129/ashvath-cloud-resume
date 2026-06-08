@@ -338,3 +338,233 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
     ease: premiumEase,
   });
 });
+
+
+// ═══════════════════════════════════════════
+//  GENERATIVE ASCII ART — "AR" CONVERGENCE
+// ═══════════════════════════════════════════
+
+(function() {
+  const ac = document.getElementById('ascii-canvas');
+  if (!ac) return;
+  const ax = ac.getContext('2d');
+
+  // ── "AR" bitmap at 5×7 per glyph, 1 col gap ──
+  // Each glyph is a 5-wide × 7-tall pixel map
+  const GLYPHS = {
+    A: [
+      [0,1,1,1,0],
+      [1,0,0,0,1],
+      [1,0,0,0,1],
+      [1,1,1,1,1],
+      [1,0,0,0,1],
+      [1,0,0,0,1],
+      [1,0,0,0,1],
+    ],
+    R: [
+      [1,1,1,1,0],
+      [1,0,0,0,1],
+      [1,0,0,0,1],
+      [1,1,1,1,0],
+      [1,0,1,0,0],
+      [1,0,0,1,0],
+      [1,0,0,0,1],
+    ]
+  };
+
+  // Build the set of "lit" grid coords for AR (gap of 2 cols between letters)
+  function buildARCells(gridW, gridH) {
+    const letterW = 5, letterH = 7, gap = 3;
+    const totalW = letterW * 2 + gap;
+    const startCol = Math.floor((gridW - totalW) / 2);
+    const startRow = Math.floor((gridH - letterH) / 2);
+    const lit = new Set();
+    ['A','R'].forEach((ch, li) => {
+      const offC = startCol + li * (letterW + gap);
+      GLYPHS[ch].forEach((row, r) => {
+        row.forEach((px, c) => {
+          if (px) lit.add(`${offC + c},${startRow + r}`);
+        });
+      });
+    });
+    return lit;
+  }
+
+  const CHARS = '01アイウエオカキクケコABCDEFRX#@%&'.split('');
+  const CELL = 18; // px per cell
+  let cols, rows, cells, litSet;
+  let phase = 0; // 0=chaos 1=converging 2=formed 3=exploding, loops
+  let phaseTimer = 0;
+  const CHAOS_DUR    = 180;
+  const CONVERGE_DUR = 120;
+  const FORMED_DUR   = 140;
+  const EXPLODE_DUR  = 80;
+
+  function resize() {
+    ac.width  = ac.offsetWidth;
+    ac.height = ac.offsetHeight;
+    cols = Math.floor(ac.width  / CELL);
+    rows = Math.floor(ac.height / CELL);
+    litSet = buildARCells(cols, rows);
+    initCells();
+  }
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function pick(arr)  { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function initCells() {
+    cells = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const isLit = litSet.has(`${c},${r}`);
+        cells.push({
+          c, r,
+          // screen position (jittered randomly at start)
+          x: rnd(0, ac.width),
+          y: rnd(0, ac.height),
+          // home = grid position
+          hx: c * CELL + CELL / 2,
+          hy: r * CELL + CELL / 2,
+          char: pick(CHARS),
+          charTimer: Math.floor(rnd(0, 20)),
+          // brightness: lit cells bright, background dim
+          targetAlpha: isLit ? 1.0 : 0.08,
+          alpha: Math.random(),
+          isLit,
+          // velocity for explosion phase
+          vx: 0, vy: 0,
+          // scale
+          scale: rnd(0.5, 1.2),
+          // mutation rate – lit cells mutate slower once formed
+          mutRate: isLit ? 0.015 : 0.06,
+        });
+      }
+    }
+  }
+
+  function getAccentColor() {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue('--accent').trim() || '#00ffcc';
+  }
+
+  function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return {r,g,b};
+  }
+
+  let frameId;
+  function draw() {
+    frameId = requestAnimationFrame(draw);
+    ax.clearRect(0, 0, ac.width, ac.height);
+
+    phaseTimer++;
+    const phaseDurs = [CHAOS_DUR, CONVERGE_DUR, FORMED_DUR, EXPLODE_DUR];
+    if (phaseTimer > phaseDurs[phase]) {
+      phaseTimer = 0;
+      phase = (phase + 1) % 4;
+      // on explosion start, give cells a velocity burst
+      if (phase === 3) {
+        cells.forEach(cell => {
+          if (cell.isLit) {
+            const angle = rnd(0, Math.PI * 2);
+            const speed = rnd(4, 18);
+            cell.vx = Math.cos(angle) * speed;
+            cell.vy = Math.sin(angle) * speed;
+          }
+        });
+      }
+      // on chaos start, scatter again
+      if (phase === 0) {
+        cells.forEach(cell => {
+          cell.x = rnd(0, ac.width);
+          cell.y = rnd(0, ac.height);
+          cell.vx = 0; cell.vy = 0;
+        });
+      }
+    }
+
+    const t  = phaseTimer / phaseDurs[phase]; // 0→1 within phase
+    const accent = hexToRgb(getAccentColor());
+    ax.font = `bold ${CELL - 2}px "Space Mono", monospace`;
+    ax.textAlign = 'center';
+    ax.textBaseline = 'middle';
+
+    cells.forEach(cell => {
+      // ── position update ──
+      if (phase === 0) {
+        // chaos: drift slowly
+        cell.x += Math.sin(phaseTimer * 0.03 + cell.c) * 0.4;
+        cell.y += Math.cos(phaseTimer * 0.03 + cell.r) * 0.4;
+        // keep in bounds
+        if (cell.x < 0) cell.x = ac.width;
+        if (cell.x > ac.width) cell.x = 0;
+        if (cell.y < 0) cell.y = ac.height;
+        if (cell.y > ac.height) cell.y = 0;
+      } else if (phase === 1) {
+        // converge: ease toward home
+        cell.x += (cell.hx - cell.x) * (0.04 + t * 0.06);
+        cell.y += (cell.hy - cell.y) * (0.04 + t * 0.06);
+      } else if (phase === 2) {
+        // formed: tiny wobble
+        cell.x = cell.hx + Math.sin(phaseTimer * 0.05 + cell.c * 0.7) * 0.8;
+        cell.y = cell.hy + Math.cos(phaseTimer * 0.05 + cell.r * 0.7) * 0.8;
+      } else if (phase === 3) {
+        // exploding
+        cell.vx *= 0.93;
+        cell.vy *= 0.93;
+        cell.x += cell.vx;
+        cell.y += cell.vy;
+      }
+
+      // ── char mutation ──
+      cell.charTimer--;
+      if (cell.charTimer <= 0) {
+        cell.char = pick(CHARS);
+        cell.charTimer = Math.floor(rnd(8, 35));
+        if (phase === 2 && cell.isLit) cell.charTimer = Math.floor(rnd(40, 90));
+      }
+
+      // ── alpha ──
+      let targetA = cell.targetAlpha;
+      if (phase === 3 && cell.isLit) targetA = 1 - t;
+      if (phase === 0 && !cell.isLit) targetA = 0.05 + Math.sin(phaseTimer * 0.04 + cell.c) * 0.04;
+      cell.alpha += (targetA - cell.alpha) * 0.08;
+
+      if (cell.alpha < 0.01) return;
+
+      // ── color: lit cells = accent, bg cells = dim white ──
+      let color;
+      if (cell.isLit) {
+        color = `rgba(${accent.r},${accent.g},${accent.b},${cell.alpha.toFixed(3)})`;
+      } else {
+        color = `rgba(255,255,255,${(cell.alpha * 0.5).toFixed(3)})`;
+      }
+
+      ax.fillStyle = color;
+      ax.save();
+      ax.translate(cell.x, cell.y);
+      ax.fillText(cell.char, 0, 0);
+      ax.restore();
+    });
+  }
+
+  // observe section entering viewport to start/stop
+  const section = ac.closest('section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        resize();
+        draw();
+      } else {
+        cancelAnimationFrame(frameId);
+      }
+    });
+  }, { threshold: 0.05 });
+  observer.observe(section);
+
+  window.addEventListener('resize', () => {
+    if (ac.offsetParent !== null) resize();
+  });
+})();
