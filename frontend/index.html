@@ -8,26 +8,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <canvas id="matrix-bg"></canvas>
 
-  <nav>
+  <nav class="foreground">
     <div class="nav-logo">AR // SYS</div>
     <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#projects">Work</a>
-      <a href="#contact">Contact</a>
+      <a href="#about">ABOUT</a>
+      <a href="#projects">WORK</a>
+      <a href="#contact">CONTACT</a>
     </div>
   </nav>
 
-  <main>
+  <main class="foreground">
     <section class="hero">
       <div class="hero-wrapper">
-        <p class="eyebrow" class="gsap-reveal">104840775962 // ROOT</p>
+        <p class="eyebrow gsap-reveal">104840775962 // ROOT</p>
         <h1 class="gsap-reveal">ASHVATH</h1>
         <h1 class="gsap-reveal indent">RAMESH</h1>
         <p class="subtitle gsap-reveal">CREATIVE CLOUD ENGINEER & DEVELOPER</p>
@@ -38,18 +37,10 @@
       <h2 class="gsap-reveal">ABOUT</h2>
       <p class="gsap-reveal">Building scalable architecture and full-stack solutions. Bridging the gap between raw infrastructure and seamless user experiences.</p>
     </section>
-    
     <section class="spacer"></section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  
-  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
-  
-  <script src="script.js"></script>
-
-  <div id="control-panel">
+  <div id="control-panel" class="foreground">
     <div class="panel-header">SYS_CONFIG</div>
     <div class="control-group">
       <label for="speed-slider">SPEED: <span id="speed-val">1.0</span></label>
@@ -64,5 +55,11 @@
       <input type="color" id="color-picker" value="#00ffcc">
     </div>
   </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
