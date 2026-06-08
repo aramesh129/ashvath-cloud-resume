@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     e.preventDefault();
-    lenis.scrollTo(this.getAttribute('href'), { offset: -70 }); // Offset for header height
+    lenis.scrollTo(this.getAttribute('href'), { offset: -70 }); 
   });
 });
 
@@ -34,7 +34,6 @@ introTimeline.to('.hero .gsap-reveal', {
   stagger: 0.3
 });
 
-// Target the new .main-header class
 introTimeline.to('.main-header', {
   y: 0,
   duration: 1.5,
@@ -75,20 +74,18 @@ function typeMessage() {
     charIndex++;
   }
 
-  let typeSpeed = isDeleting ? 30 : 60; // Deletion is faster
+  let typeSpeed = isDeleting ? 30 : 60; 
 
-  // Pause at the end of a message
   if (!isDeleting && charIndex === currentMsg.length) {
     typeSpeed = 2000; 
     isDeleting = true;
   } else if (isDeleting && charIndex === 0) {
     isDeleting = false;
     messageIndex = (messageIndex + 1) % messages.length;
-    typeSpeed = 500; // Pause before typing new word
+    typeSpeed = 500; 
   }
   setTimeout(typeMessage, typeSpeed);
 }
-// Start the typing loop
 setTimeout(typeMessage, 1500);
 
 // SYS_CONFIG Dropdown Logic
@@ -97,7 +94,15 @@ const configDropdown = document.getElementById('sys-config-dropdown');
 
 configTrigger.addEventListener('click', () => {
   configDropdown.classList.toggle('hidden');
-  configTrigger.classList.toggle('active'); // Rotates the arrow
+  configTrigger.classList.toggle('active'); 
+});
+
+// Close dropdown if clicked outside
+document.addEventListener('click', (e) => {
+  if (!configTrigger.contains(e.target) && !configDropdown.contains(e.target)) {
+    configDropdown.classList.add('hidden');
+    configTrigger.classList.remove('active');
+  }
 });
 
 // 4. Generative Canvas Background (Fixed Grid Engine - Ripple Physics)
