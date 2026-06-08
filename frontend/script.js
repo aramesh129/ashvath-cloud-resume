@@ -13,38 +13,74 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// 2. GSAP Text Reveals
+// 2. GSAP Wodniack-Style Animations
 gsap.registerPlugin(ScrollTrigger);
-const revealElements = document.querySelectorAll('.gsap-reveal');
-revealElements.forEach((el) => {
+
+// Custom easing for that premium snappy feel
+const premiumEase = "power4.inOut";
+
+// Create the initial load timeline
+const introTimeline = gsap.timeline({ delay: 0.2 });
+
+// A. Reveal the Hero Text Left-to-Right
+introTimeline.to('.hero .gsap-reveal', {
+  clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+  opacity: 1,
+  duration: 1.5,
+  ease: premiumEase,
+  stagger: 0.15 // Delays each line slightly
+});
+
+// B. Drop down the Navigation Bar
+introTimeline.to('nav', {
+  y: 0,
+  duration: 1.2,
+  ease: premiumEase
+}, "-=1.0"); // Start 1 second before previous animation ends
+
+// C. Slide in the Control Panel
+introTimeline.to('#control-panel', {
+  x: 0,
+  duration: 1.2,
+  ease: premiumEase
+}, "-=1.0");
+
+// D. ScrollTrigger for elements further down the page (About section, etc.)
+const scrollElements = document.querySelectorAll('.content-section .gsap-reveal');
+scrollElements.forEach((el) => {
   gsap.to(el, {
-    scrollTrigger: { trigger: el, start: "top 85%" },
-    opacity: 1, y: 0, duration: 1.2, ease: "power4.out", stagger: 0.2
+    scrollTrigger: { 
+      trigger: el, 
+      start: "top 85%" 
+    },
+    clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    opacity: 1,
+    duration: 1.2,
+    ease: premiumEase,
+    stagger: 0.2
   });
 });
+
 
 // 3. Generative Canvas Background & Config Menu
 const canvas = document.getElementById('matrix-bg');
 const ctx = canvas.getContext('2d');
 
-// UI Elements
 const speedSlider = document.getElementById('speed-slider');
 const speedVal = document.getElementById('speed-val');
 const densitySlider = document.getElementById('density-slider');
 const densityVal = document.getElementById('density-val');
 const colorPicker = document.getElementById('color-picker');
 
-// State Variables tied directly to initial UI values
 let dropSpeed = parseFloat(speedSlider.value);
 let fontSize = parseInt(densitySlider.value);
 let themeColor = colorPicker.value;
-let baseColor = '#555555'; // Brightened the inactive text so you can see it
+let baseColor = '#555555'; 
 let cols;
 let drops = [];
 let mouseX = -1000;
 let mouseY = -1000;
 
-// Update UI & Variables on input
 speedSlider.addEventListener('input', (e) => {
   dropSpeed = parseFloat(e.target.value);
   speedVal.textContent = dropSpeed.toFixed(1);
@@ -58,11 +94,9 @@ densitySlider.addEventListener('input', (e) => {
 
 colorPicker.addEventListener('input', (e) => {
   themeColor = e.target.value;
-  // This physically changes your CSS variable so headers/sliders update too
   document.documentElement.style.setProperty('--accent', themeColor);
 });
 
-// Mouse tracking
 window.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
@@ -79,7 +113,7 @@ function resizeCanvas() {
   
   drops = [];
   for(let i = 0; i < cols; i++) {
-    drops[i] = Math.random() * -100; // Staggered drop start
+    drops[i] = Math.random() * -100; 
   }
 }
 
@@ -87,7 +121,6 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function drawCanvas() {
-  // Dark overlay creates the fading trail
   ctx.fillStyle = 'rgba(5, 5, 5, 0.15)'; 
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.font = fontSize + 'px "Space Mono", monospace';
@@ -109,17 +142,13 @@ function drawCanvas() {
       const force = (radius - distance) / radius;
       drawX += (dx / distance) * force * 40; 
       drawY += (dy / distance) * force * 40; 
-      
-      // Cursor reaction color
       ctx.fillStyle = themeColor; 
     } else {
-      // Normal background rain color
       ctx.fillStyle = baseColor;
     }
     
     ctx.fillText(text, drawX, drawY);
     
-    // Reset drop to top randomly when it hits bottom
     if(baseY > canvas.height && Math.random() > 0.975) {
       drops[i] = 0;
     }
