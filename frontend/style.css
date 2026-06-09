@@ -18,6 +18,7 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   height: 100vh;
   z-index: 1;
   pointer-events: none;
+  display: block; 
 }
 
 .main-header {
@@ -330,7 +331,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 }
 
 .work-container {
-  border-bottom: 1px solid var(--text-muted);
   display: flex;
   flex-direction: column;
 }
@@ -341,6 +341,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   align-items: center;
   gap: 2rem;
   padding: 1.6rem 5vw;
+  border-bottom: 1px solid var(--text-muted);
   text-decoration: none;
   color: var(--text-primary);
   position: relative;
@@ -413,19 +414,35 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   justify-content: flex-end;
 }
 
+.work-item:hover .work-item-arrow {
+  transform: translateX(4px);
+}
+
 .work-details {
-  height: 0;
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  background: rgba(10, 10, 10, 0.95);
+  border-bottom: 1px solid transparent;
+}
+
+.work-container.active .work-details {
+  grid-template-rows: 1fr;
+  border-bottom: 1px solid var(--text-muted);
 }
 
 .work-details-inner {
-  padding: 2rem 5vw;
-  background: rgba(255, 255, 255, 0.02);
-  font-size: 0.9rem;
-  line-height: 1.6;
+  overflow: hidden;
 }
 
-.work-details-inner p {
+.work-details-content {
+  padding: 2.5rem 5vw;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.work-details-content p {
   margin-bottom: 1.5rem;
   max-width: 800px;
 }
@@ -436,10 +453,11 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   text-decoration: none;
   font-weight: bold;
   border: 1px solid var(--accent);
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   text-transform: uppercase;
   font-size: 0.75rem;
   transition: all 0.3s ease;
+  margin-top: 0.5rem;
 }
 
 .detail-link:hover {

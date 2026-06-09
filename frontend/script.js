@@ -183,6 +183,10 @@ window.addEventListener('mouseout', () => { mouseX = -1000; mouseY = -1000; });
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  
+  if (canvas.width < 500) canvas.width = window.screen.width;
+  if (canvas.height < 500) canvas.height = window.screen.height;
+
   let charWidth = fontSize * 0.6; 
   cols = Math.floor(canvas.width / charWidth) + 1;
   rows = Math.floor(canvas.height / fontSize) + 1;
@@ -199,6 +203,7 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
+setTimeout(resizeCanvas, 200);
 
 function drawCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -348,23 +353,25 @@ document.querySelectorAll('.work-item').forEach(item => {
 
 document.querySelectorAll('.work-container').forEach(container => {
   const header = container.querySelector('.work-item');
-  const details = container.querySelector('.work-details');
   const arrow = container.querySelector('.work-item-arrow');
 
-  header.addEventListener('click', () => {
+  header.addEventListener('click', (e) => {
+    e.preventDefault();
     const isActive = container.classList.contains('active');
     
     document.querySelectorAll('.work-container').forEach(c => {
       c.classList.remove('active');
-      gsap.to(c.querySelector('.work-details'), { height: 0, duration: 0.4, ease: 'power2.out' });
       gsap.to(c.querySelector('.work-item-arrow'), { rotate: 0, duration: 0.3 });
     });
 
     if (!isActive) {
       container.classList.add('active');
-      gsap.to(details, { height: 'auto', duration: 0.4, ease: 'power2.out' });
       gsap.to(arrow, { rotate: 90, duration: 0.3 });
     }
+
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 400); 
   });
 });
 
@@ -385,17 +392,21 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
   const ax = ac.getContext('2d');
 
   const GLYPHS = {
-    A: [[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
-    R: [[1,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
-    S: [[0,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[0,1,1,1,0],[0,0,0,0,1],[0,0,0,0,1],[1,1,1,1,0]],
-    H: [[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
-    V: [[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0]],
     T: [[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],
-    M: [[1,0,0,0,1],[1,1,0,1,1],[1,0,1,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
-    E: [[1,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,1,1]]
+    H: [[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+    A: [[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+    N: [[1,0,0,0,1],[1,1,0,0,1],[1,0,1,0,1],[1,0,0,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+    K: [[1,0,0,0,1],[1,0,0,1,0],[1,0,1,0,0],[1,1,0,0,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
+    S: [[0,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[0,1,1,1,0],[0,0,0,0,1],[0,0,0,0,1],[1,1,1,1,0]],
+    F: [[1,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,0,0,0,0],[1,0,0,0,0]],
+    O: [[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+    R: [[1,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
+    V: [[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0]],
+    I: [[0,1,1,1,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,1,1,1,0]],
+    G: [[0,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[1,0,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]]
   };
 
-  const wordsToCycle = ['AR', 'ASHVATH', 'RAMESH'];
+  const wordsToCycle = ['THANKS', 'FOR', 'VISITING'];
   let currentWordIdx = 0;
 
   function buildWordCells(word, gridW, gridH) {
@@ -423,10 +434,10 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
   let cols, rows, cells, litSet;
   let phase = 1; 
   let phaseTimer = 0;
-  const CHAOS_DUR    = 50;
-  const CONVERGE_DUR = 60;
-  const FORMED_DUR   = 150;
-  const EXPLODE_DUR  = 40;
+  const CHAOS_DUR    = 120;
+  const CONVERGE_DUR = 120;
+  const FORMED_DUR   = 300;
+  const EXPLODE_DUR  = 60;
 
   function resize() {
     ac.width  = ac.offsetWidth;
