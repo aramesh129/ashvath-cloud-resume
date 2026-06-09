@@ -611,3 +611,19 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   height: 100%;
   image-rendering: pixelated;
 }
+
+/* --- Rolling Text Animation Styles --- */
+.char-wrap {
+  display: inline-flex;
+  overflow: hidden;
+  /* Adds a tiny bit of padding so letters don't get accidentally clipped */
+  padding-bottom: 0.1em; 
+  padding-top: 0.1em;
+  margin-top: -0.1em;
+}
+
+.char {
+  display: inline-block;
+  transform: translateY(0%);
+  will-change: transform;
+}
