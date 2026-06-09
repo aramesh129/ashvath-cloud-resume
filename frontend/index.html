@@ -4,18 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ashvath Ramesh's Site</title>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <canvas id="matrix-bg"></canvas>
 
   <header class="foreground main-header">
-    
     <div class="header-segment logo-segment">
       <div class="logo-wrapper">
         <a href="#hero" id="top-link">
@@ -26,7 +23,7 @@
 
     <div class="header-segment message-segment">
       <div id="dynamic-messenger" class="config-text-input">
-        <span class="typed-message">> <span id="typing-text">INITIALIZING...</span></span><span class="cursor">|</span>
+        <span class="typed-message">> <span id="typing-text"></span></span><span class="cursor">|</span>
       </div>
     </div>
   
@@ -73,11 +70,10 @@
         <p class="eyebrow gsap-reveal">104840775962 // ROOT</p>
         <h1 class="gsap-reveal roll-name">ASHVATH</h1>
         <h1 class="gsap-reveal indent roll-name">RAMESH</h1>
-        <p class="subtitle gsap-reveal">SECOND YEAR CS & DS AT PURDUE</p>
+        <p class="subtitle gsap-reveal">SECOND YEAR AT PURDUE</p>
       </div>
     </section>
 
-    <!-- ═══════════════ ABOUT ═══════════════ -->
     <section id="about" class="content-section about-section">
       <div class="about-header">
         <h2 class="gsap-reveal section-label">ABOUT</h2>
@@ -86,8 +82,8 @@
 
       <div class="about-body">
         <div class="about-bio gsap-reveal-up">
-          <p class="about-lead">I BUILD THINGS THAT<br><span class="accent-text">LIVE ON THE WEB.</span></p>
-          <p class="about-sub">CS + Data Science student at Purdue. I'm obsessed with the intersection of clean systems thinking and expressive interfaces — the kind of code that makes people feel something.</p>
+          <p class="about-lead">Hey!<br><span class="accent-text">ITS NICE SEEING YOU</span></p>
+          <p class="about-sub">Computer Science Honors and Data Science double major at Purdue University. I’ve been coding for several years and am continuously learning new technologies across the stack. I build full stack applications and work with cloud systems, APIs, and everything in between to take ideas from concept to reality.<br><br>This past summer, I interned as a Software Engineering Intern at General Dynamics Information Technology, where I gained hands on experience with the software development lifecycle in a large enterprise environment and worked on a real world production system.<br><br>Check out some of my work below!</p>
         </div>
 
         <div class="about-stats">
@@ -124,7 +120,6 @@
       </div>
     </section>
 
-    <!-- ═══════════════ WORK ═══════════════ -->
     <section id="projects" class="content-section work-section">
       <div class="work-header">
         <h2 class="gsap-reveal section-label">WORK & CERTS</h2>
@@ -132,46 +127,85 @@
       </div>
 
       <div class="work-list" id="work-list">
-        <a class="work-item" href="#" data-index="01">
-          <span class="work-item-index">01</span>
-          <span class="work-item-title">NEURAL NETWORK VISUALIZER</span>
-          <span class="work-item-tags">ML · PYTHON · D3.JS</span>
-          <span class="work-item-arrow">→</span>
-        </a>
-        <a class="work-item" href="#" data-index="02">
-          <span class="work-item-index">02</span>
-          <span class="work-item-title">ALGORITHMIC TRADING BOT</span>
-          <span class="work-item-tags">PYTHON · FINANCE · API</span>
-          <span class="work-item-arrow">→</span>
-        </a>
-        <a class="work-item" href="#" data-index="03">
-          <span class="work-item-index">03</span>
-          <span class="work-item-title">REAL-TIME CHAT APP</span>
-          <span class="work-item-tags">NODE · WEBSOCKETS · REACT</span>
-          <span class="work-item-arrow">→</span>
-        </a>
-        <a class="work-item" href="#" data-index="04">
-          <span class="work-item-index">04</span>
-          <span class="work-item-title">DATA PIPELINE &amp; DASHBOARD</span>
-          <span class="work-item-tags">SQL · PANDAS · D3.JS</span>
-          <span class="work-item-arrow">→</span>
-        </a>
-        <a class="work-item" href="#" data-index="05">
-          <span class="work-item-index">05</span>
-          <span class="work-item-title">COMPILER FROM SCRATCH</span>
-          <span class="work-item-tags">C++ · SYSTEMS · LLVM</span>
-          <span class="work-item-arrow">→</span>
-        </a>
-        <a class="work-item" href="#" data-index="06">
-          <span class="work-item-index">06</span>
-          <span class="work-item-title">THIS PORTFOLIO</span>
-          <span class="work-item-tags">GSAP · CANVAS · CSS</span>
-          <span class="work-item-arrow">→</span>
-        </a>
+        
+        <div class="work-container">
+          <div class="work-item" data-index="01">
+            <span class="work-item-index">01</span>
+            <span class="work-item-title">CLOUD RESUME CHALLENGE</span>
+            <span class="work-item-tags">AWS · SERVERLESS · API</span>
+            <span class="work-item-arrow">→</span>
+          </div>
+          <div class="work-details">
+            <div class="work-details-inner">
+              <p>Architected a serverless portfolio utilizing AWS S3, CloudFront, Lambda, and DynamoDB. Implemented backend infrastructure as code via Terraform, bridging the gap between raw infrastructure and continuous deployment.</p>
+              <a href="#" class="detail-link">VIEW ARCHITECTURE</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-container">
+          <div class="work-item" data-index="02">
+            <span class="work-item-index">02</span>
+            <span class="work-item-title">AIRBEATS</span>
+            <span class="work-item-tags">TENSORFLOW.JS · GESTURE REC</span>
+            <span class="work-item-arrow">→</span>
+          </div>
+          <div class="work-details">
+            <div class="work-details-inner">
+              <p>Developed an interactive music platform for the AirBeats Hackathon. Built using TensorFlow.js to process and map real-time human gesture recognition to synthesized audio outputs.</p>
+              <a href="#" class="detail-link">VIEW GITHUB</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-container">
+          <div class="work-item" data-index="03">
+            <span class="work-item-index">03</span>
+            <span class="work-item-title">TICKET MANAGEMENT SYSTEM</span>
+            <span class="work-item-tags">JAVA · SWING · SOCKETS</span>
+            <span class="work-item-arrow">→</span>
+          </div>
+          <div class="work-details">
+            <div class="work-details-inner">
+              <p>Engineered a full-stack Java application featuring a multi-threaded server architecture. Implemented synchronized client-server communication using Sockets and mapped data to a comprehensive Swing-based GUI.</p>
+              <a href="#" class="detail-link">VIEW REPO</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-container">
+          <div class="work-item" data-index="04">
+            <span class="work-item-index">04</span>
+            <span class="work-item-title">INDEPENDENT GAMES</span>
+            <span class="work-item-tags">UNITY · C#</span>
+            <span class="work-item-arrow">→</span>
+          </div>
+          <div class="work-details">
+            <div class="work-details-inner">
+              <p>Designed, programmed, and self-published five distinct independent video games utilizing the Unity engine and C# scripting over a dedicated two-year development period.</p>
+              <a href="#" class="detail-link">PLAY DEMOS</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-container">
+          <div class="work-item" data-index="05">
+            <span class="work-item-index">05</span>
+            <span class="work-item-title">SUDOKU SOLVER</span>
+            <span class="work-item-tags">JAVA · ALGORITHMS</span>
+            <span class="work-item-arrow">→</span>
+          </div>
+          <div class="work-details">
+            <div class="work-details-inner">
+              <p>Implemented a highly optimized recursive backtracking algorithm in Java capable of parsing and instantly computing solutions for standard 9x9 Sudoku matrices.</p>
+              <a href="#" class="detail-link">VIEW CODE</a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- ═══════════════ CONTACT ═══════════════ -->
     <section id="contact" class="content-section contact-section">
       <div class="contact-header">
         <h2 class="gsap-reveal section-label">CONTACT</h2>
@@ -186,7 +220,6 @@
         </a>
       </div>
 
-    <!-- ═══════════════ ASCII ART ═══════════════ -->
     <section class="ascii-art-section">
       <canvas id="ascii-canvas"></canvas>
     </section>
@@ -197,6 +230,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
   <script src="script.js"></script>
-
 </body>
 </html>

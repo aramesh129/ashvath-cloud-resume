@@ -37,17 +37,13 @@ introTimeline.to('.main-header', {
   ease: premiumEase
 }, "-=1.8");
 
-// ---------------------------------------------------
-// TEXT SPLITTING FOR ROLLING ANIMATION
-// ---------------------------------------------------
 const rollNames = document.querySelectorAll('.roll-name');
 
 rollNames.forEach(nameEl => {
   const text = nameEl.textContent;
   nameEl.textContent = ''; 
-  nameEl.setAttribute('aria-label', text); // Keeps it readable for screen readers
+  nameEl.setAttribute('aria-label', text); 
 
-  // Splits the word and wraps every letter in our CSS boxes
   text.split('').forEach(char => {
     if (char === ' ') {
       nameEl.appendChild(document.createTextNode(' '));
@@ -63,36 +59,21 @@ rollNames.forEach(nameEl => {
   });
 });
 
-// ---------------------------------------------------
-// THE ROLLING WAVE ANIMATION LOOP
-// ---------------------------------------------------
 function playRollAnimation() {
   const chars = document.querySelectorAll('.roll-name .char');
-  const rollTl = gsap.timeline();
   
-  // 1. Slide letters up and out of their boxes
-  rollTl.to(chars, {
-    y: "-110%",
-    duration: 0.5,
-    ease: "power3.in",
-    stagger: 0.04
-  })
-  // 2. Instantly teleport them to the bottom (invisible)
-  .set(chars, { y: "110%" })
-  // 3. Slide them back up into their original resting place
-  .to(chars, {
-    y: "0%",
-    duration: 0.6,
-    ease: "power3.out",
-    stagger: 0.04
+  chars.forEach((char, i) => {
+    gsap.timeline({ delay: i * 0.05 })
+      .to(char, { y: "-110%", duration: 0.4, ease: "power3.in" })
+      .set(char, { y: "110%" })
+      .to(char, { y: "0%", duration: 0.4, ease: "power3.out" });
   });
 }
 
-// Wait 4 seconds for the initial page load animations to finish, 
-// then trigger the rolling wave every 6 seconds infinitely.
 setTimeout(() => {
-  setInterval(playRollAnimation, 6000);
-}, 4000);
+  playRollAnimation();
+  setInterval(playRollAnimation, 5000);
+}, 2500);
 
 const scrollElements = document.querySelectorAll('.content-section .gsap-reveal');
 scrollElements.forEach((el) => {
@@ -362,6 +343,28 @@ document.querySelectorAll('.work-item').forEach(item => {
   });
   item.addEventListener('mouseleave', () => {
     gsap.to(item, { skewX: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)', overwrite: 'auto' });
+  });
+});
+
+document.querySelectorAll('.work-container').forEach(container => {
+  const header = container.querySelector('.work-item');
+  const details = container.querySelector('.work-details');
+  const arrow = container.querySelector('.work-item-arrow');
+
+  header.addEventListener('click', () => {
+    const isActive = container.classList.contains('active');
+    
+    document.querySelectorAll('.work-container').forEach(c => {
+      c.classList.remove('active');
+      gsap.to(c.querySelector('.work-details'), { height: 0, duration: 0.4, ease: 'power2.out' });
+      gsap.to(c.querySelector('.work-item-arrow'), { rotate: 0, duration: 0.3 });
+    });
+
+    if (!isActive) {
+      container.classList.add('active');
+      gsap.to(details, { height: 'auto', duration: 0.4, ease: 'power2.out' });
+      gsap.to(arrow, { rotate: 90, duration: 0.3 });
+    }
   });
 });
 

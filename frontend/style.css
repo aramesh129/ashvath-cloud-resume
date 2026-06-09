@@ -1,4 +1,3 @@
-/* --- Root Variables & Base --- */
 :root {
   --bg-color: #050505;
   --text-primary: #ffffff;
@@ -21,7 +20,6 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   pointer-events: none;
 }
 
-/* --- Main Header / Menu Bar --- */
 .main-header {
   position: fixed;
   top: 0;
@@ -49,7 +47,6 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   border-left: 1px solid var(--text-muted);
 }
 
-/* --- 1. Left: Logo Segment --- */
 .logo-segment { grid-column: 1; }
 .logo-wrapper { height: 100%; width: 100%; display: flex; align-items: center; }
 
@@ -84,14 +81,12 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
   white-space: nowrap; 
 }
 
-/* --- 2. Mid-Left: Message Segment --- */
 .message-segment { grid-column: 2; padding: 0 1.5rem; justify-content: flex-start; }
 #dynamic-messenger { width: 100%; text-align: left; background: transparent; border: none; padding: 0; cursor: default; }
 .typed-message { font-size: 0.8rem; text-transform: uppercase; color: var(--text-primary); }
 .cursor { color: var(--accent); animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* --- 3. Center: Nav Segment --- */
 .nav-segment { grid-column: 3; justify-content: center; }
 #centered-nav { display: flex; align-items: center; height: 100%; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
 
@@ -117,7 +112,6 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
 }
 .nav-social svg { width: 18px; height: 18px; fill: currentColor; }
 
-/* --- 4. Right: Config Segment --- */
 .config-segment { grid-column: 4; }
 #sys-config-trigger {
   border: none;
@@ -141,7 +135,6 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
 .dropdown-arrow { font-size: 0.7rem; color: var(--text-primary); transition: transform 0.3s ease; }
 #sys-config-trigger.active .dropdown-arrow { transform: rotate(180deg); }
 
-/* --- Hidden Dropdown Panel --- */
 .sys-config-panel {
   display: block;
   opacity: 1;
@@ -168,7 +161,6 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 16
 input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 2px; background: var(--text-muted); }
 input[type="color"] { width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--text-muted); }
 
-/* --- Hero & Content --- */
 .hero { height: calc(100vh - var(--header-height)); margin-top: var(--header-height); display: flex; flex-direction: column; justify-content: center; padding: 0 5vw; }
 h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-height: 0.85; text-transform: uppercase; letter-spacing: -2px; }
 .indent { margin-left: 10vw; color: transparent; -webkit-text-stroke: 1px var(--text-primary); }
@@ -180,10 +172,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .content-section p { font-size: 1.5rem; max-width: 800px; line-height: 1.6; }
 .spacer { height: 100vh; }
 .gsap-reveal { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); opacity: 0; }
-
-/* ═══════════════════════════════════════
-   SHARED SECTION STYLES
-═══════════════════════════════════════ */
 
 .section-label {
   font-family: 'Syne', sans-serif !important;
@@ -207,10 +195,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   opacity: 0;
   transform: translateY(40px);
 }
-
-/* ═══════════════════════════════════════
-   ABOUT SECTION
-═══════════════════════════════════════ */
 
 .about-section {
   position: relative;
@@ -321,10 +305,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   background: rgba(0, 255, 204, 0.05);
 }
 
-/* ═══════════════════════════════════════
-   WORK SECTION
-═══════════════════════════════════════ */
-
 .work-section {
   position: relative;
   padding: 6vw 0 6vw;
@@ -346,6 +326,13 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   display: flex;
   flex-direction: column;
   width: 100%;
+  border-top: 1px solid var(--text-muted);
+}
+
+.work-container {
+  border-bottom: 1px solid var(--text-muted);
+  display: flex;
+  flex-direction: column;
 }
 
 .work-item {
@@ -354,15 +341,12 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   align-items: center;
   gap: 2rem;
   padding: 1.6rem 5vw;
-  border-bottom: 1px solid var(--text-muted);
   text-decoration: none;
   color: var(--text-primary);
   position: relative;
   overflow: hidden;
   transition: color 0.3s ease;
   cursor: pointer;
-
-  /* start state for stagger */
   opacity: 0;
   transform: translateX(-30px) rotate(-0.5deg);
 }
@@ -425,23 +409,43 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 
 .work-item-arrow {
   font-size: 1.2rem;
-  transition: transform 0.3s ease;
   display: flex;
   justify-content: flex-end;
 }
 
-.work-item:hover .work-item-arrow {
-  transform: translateX(4px);
+.work-details {
+  height: 0;
+  overflow: hidden;
 }
 
-/* first item no top border; add one at top of list */
-.work-list {
-  border-top: 1px solid var(--text-muted);
+.work-details-inner {
+  padding: 2rem 5vw;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
-/* ═══════════════════════════════════════
-   CONTACT SECTION
-═══════════════════════════════════════ */
+.work-details-inner p {
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+}
+
+.detail-link {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: bold;
+  border: 1px solid var(--accent);
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.detail-link:hover {
+  background: var(--accent);
+  color: var(--bg-color);
+}
 
 .contact-section {
   padding: 6vw 5vw 6vw;
@@ -458,7 +462,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   margin-bottom: 3rem;
 }
 
-/* Marquee */
 .contact-marquee-wrapper {
   overflow: hidden;
   border-top: 1px solid var(--text-muted);
@@ -493,7 +496,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   to   { transform: translateX(-50%); }
 }
 
-/* CTA Email */
 .contact-cta {
   margin-bottom: 2.5rem;
 }
@@ -545,7 +547,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   transition: color 0.3s ease;
 }
 
-/* Social links */
 .contact-socials {
   display: flex;
   gap: 3rem;
@@ -577,7 +578,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   transform: translate(3px, -3px);
 }
 
-/* Footer tag */
 .contact-footer-tag {
   padding-top: 2rem;
   border-top: 1px solid var(--text-muted);
@@ -589,10 +589,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   color: rgba(255,255,255,0.45);
   text-transform: uppercase;
 }
-
-/* ═══════════════════════════════════════
-   ASCII ART SECTION
-═══════════════════════════════════════ */
 
 .ascii-art-section {
   position: relative;
@@ -612,11 +608,9 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   image-rendering: pixelated;
 }
 
-/* --- Rolling Text Animation Styles --- */
 .char-wrap {
   display: inline-flex;
   overflow: hidden;
-  /* Adds a tiny bit of padding so letters don't get accidentally clipped */
   padding-bottom: 0.1em; 
   padding-top: 0.1em;
   margin-top: -0.1em;
