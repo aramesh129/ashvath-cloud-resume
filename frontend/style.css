@@ -643,21 +643,22 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
    VISITOR COUNTER (nav)
 ════════════════════════════════════════════ */
 .nav-visitor-count {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.65rem;
   letter-spacing: 2px;
   color: rgba(255,255,255,0.45);
-  padding: 0 1rem;
-  border-left: 1px solid var(--text-muted);
-  border-right: 1px solid var(--text-muted);
-  height: 100%;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--text-muted);
+  border-radius: 100px;
   white-space: nowrap;
   cursor: default;
   user-select: none;
+  height: auto;
+  align-self: center;
 }
-
+ 
 .visitor-dot {
   width: 6px;
   height: 6px;
@@ -667,11 +668,12 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   animation: dot-pulse 2s ease-in-out infinite;
   flex-shrink: 0;
 }
-
+ 
 @keyframes dot-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.4; transform: scale(0.7); }
 }
+ 
 
 /* ═══════════════════════════════════════════
    CONTACT SOCIALS
