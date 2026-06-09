@@ -144,121 +144,133 @@ document.addEventListener('click', (e) => {
   }
 });
 
+function getThemeRgb() {
+  const hex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#00ffcc';
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return {r, g, b};
+}
+
 const canvas = document.getElementById('matrix-bg');
 const ctx = canvas.getContext('2d');
 
-const radiusSlider = document.getElementById('speed-slider');
-const radiusVal = document.getElementById('speed-val');
+const speedSlider = document.getElementById('speed-slider');
+const speedVal = document.getElementById('speed-val');
 const densitySlider = document.getElementById('density-slider');
 const densityVal = document.getElementById('density-val');
 const colorPicker = document.getElementById('color-picker');
 
-let hoverRadius = parseFloat(radiusSlider.value);
-let fontSize = parseInt(densitySlider.value);
-let themeColor = colorPicker.value;
+let nodeSpeedMult = parseFloat(speedSlider.value);
+let nodeCount = parseInt(densitySlider.value);
 
-let cols, rows;
-let grid = [];
-let mouseX = -1000;
-let mouseY = -1000;
+let nodes = [];
 let targetMouseX = -1000;
 let targetMouseY = -1000;
+let currentMouseX = -1000;
+let currentMouseY = -1000;
 
-radiusSlider.addEventListener('input', (e) => {
-  hoverRadius = parseFloat(e.target.value);
-  radiusVal.textContent = hoverRadius;
+speedSlider.addEventListener('input', (e) => {
+  nodeSpeedMult = parseFloat(e.target.value);
+  speedVal.textContent = nodeSpeedMult.toFixed(1);
 });
 densitySlider.addEventListener('input', (e) => {
-  fontSize = parseInt(e.target.value);
-  densityVal.textContent = fontSize;
-  resizeCanvas(); 
+  nodeCount = parseInt(e.target.value);
+  densityVal.textContent = nodeCount;
+  initNodes();
 });
 colorPicker.addEventListener('input', (e) => {
-  themeColor = e.target.value;
-  document.documentElement.style.setProperty('--accent', themeColor);
+  document.documentElement.style.setProperty('--accent', e.target.value);
 });
 
 window.addEventListener('mousemove', (e) => {
   targetMouseX = e.clientX;
   targetMouseY = e.clientY;
 });
-window.addEventListener('mouseout', () => { 
-  targetMouseX = -1000; 
-  targetMouseY = -1000; 
+window.addEventListener('mouseout', () => {
+  targetMouseX = -1000;
+  targetMouseY = -1000;
 });
-
-const chars = '01+-/\\*#_'.split('');
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  initNodes();
+}
 
-  if (canvas.width < 500) canvas.width = window.screen.width;
-  if (canvas.height < 500) canvas.height = window.screen.height;
-
-  let charWidth = fontSize * 0.8;
-  let charHeight = fontSize;
-
-  cols = Math.floor(canvas.width / charWidth) + 1;
-  rows = Math.floor(canvas.height / charHeight) + 1;
-
-  grid = [];
-  for(let i = 0; i < cols; i++) {
-    grid[i] = [];
-    for(let j = 0; j < rows; j++) {
-      grid[i][j] = {
-        c: chars[Math.floor(Math.random() * chars.length)],
-        x: i * charWidth,
-        y: j * charHeight,
-        intensity: 0
-      };
-    }
+function initNodes() {
+  nodes = [];
+  for(let i = 0; i < nodeCount; i++) {
+    nodes.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: (Math.random() - 0.5) * 1.5
+    });
   }
 }
+
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-setTimeout(resizeCanvas, 200); 
 
-function drawCanvas() {
+function drawNetwork() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const accent = getThemeRgb();
 
-  mouseX += (targetMouseX - mouseX) * 0.15;
-  mouseY += (targetMouseY - mouseY) * 0.15;
+  currentMouseX += (targetMouseX - currentMouseX) * 0.15;
+  currentMouseY += (targetMouseY - currentMouseY) * 0.15;
 
-  ctx.font = fontSize + 'px "Space Mono", monospace';
-  ctx.textBaseline = 'top';
+  nodes.forEach(node => {
+    node.x += node.vx * nodeSpeedMult;
+    node.y += node.vy * nodeSpeedMult;
 
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      let cell = grid[i][j];
+    if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+    if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
 
-      let dx = cell.x - mouseX;
-      let dy = cell.y - mouseY;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      let dx = nodes[i].x - nodes[j].x;
+      let dy = nodes[i].y - nodes[j].y;
       let dist = Math.sqrt(dx*dx + dy*dy);
 
-      if (dist < hoverRadius) {
-        cell.intensity = 1.0 - (dist / hoverRadius);
-        if (Math.random() > 0.95) {
-          cell.c = chars[Math.floor(Math.random() * chars.length)];
-        }
-      } else {
-        cell.intensity -= 0.05;
-        if (cell.intensity < 0) cell.intensity = 0;
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.12 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.stroke();
       }
+    }
 
-      if (cell.intensity > 0) {
-        ctx.globalAlpha = cell.intensity;
-        ctx.fillStyle = themeColor;
-      } else {
-        ctx.globalAlpha = 0.03; 
-        ctx.fillStyle = '#ffffff';
-      }
-      ctx.fillText(cell.c, cell.x, cell.y);
+    let mx = nodes[i].x - currentMouseX;
+    let my = nodes[i].y - currentMouseY;
+    let mDist = Math.sqrt(mx*mx + my*my);
+
+    if (mDist < 200) {
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(${accent.r}, ${accent.g}, ${accent.b}, ${0.5 * (1 - mDist/200)})`;
+      ctx.lineWidth = 1;
+      ctx.moveTo(nodes[i].x, nodes[i].y);
+      ctx.lineTo(currentMouseX, currentMouseY);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(${accent.r}, ${accent.g}, ${accent.b}, ${0.8 * (1 - mDist/200)})`;
+      ctx.beginPath();
+      ctx.arc(nodes[i].x, nodes[i].y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
     }
   }
-  requestAnimationFrame(drawCanvas);
+
+  requestAnimationFrame(drawNetwork);
 }
-drawCanvas();
+drawNetwork();
 
 document.querySelectorAll('.gsap-reveal-up').forEach((el) => {
   gsap.to(el, {
@@ -355,11 +367,13 @@ document.querySelectorAll('.work-container').forEach(container => {
     
     document.querySelectorAll('.work-container').forEach(c => {
       c.classList.remove('active');
+      gsap.to(c.querySelector('.work-details'), { height: 0, duration: 0.4, ease: 'power2.out' });
       gsap.to(c.querySelector('.work-item-arrow'), { rotate: 0, duration: 0.3 });
     });
 
     if (!isActive) {
       container.classList.add('active');
+      gsap.to(container.querySelector('.work-details'), { height: 'auto', duration: 0.4, ease: 'power2.out' });
       gsap.to(arrow, { rotate: 90, duration: 0.3 });
     }
 
@@ -379,3 +393,204 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
     ease: premiumEase,
   });
 });
+
+(function() {
+  const ac = document.getElementById('ascii-canvas');
+  if (!ac) return;
+  const ax = ac.getContext('2d');
+
+  const GLYPHS = {
+    T: [[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],
+    H: [[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+    A: [[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+    N: [[1,0,0,0,1],[1,1,0,0,1],[1,0,1,0,1],[1,0,0,1,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+    K: [[1,0,0,0,1],[1,0,0,1,0],[1,0,1,0,0],[1,1,0,0,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
+    S: [[0,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[0,1,1,1,0],[0,0,0,0,1],[0,0,0,0,1],[1,1,1,1,0]],
+    F: [[1,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,0,0,0,0],[1,0,0,0,0]],
+    O: [[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+    R: [[1,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,1,1,1,0],[1,0,1,0,0],[1,0,0,1,0],[1,0,0,0,1]],
+    V: [[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0]],
+    I: [[0,1,1,1,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,1,1,1,0]],
+    G: [[0,1,1,1,1],[1,0,0,0,0],[1,0,0,0,0],[1,0,1,1,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]]
+  };
+
+  const wordsToCycle = ['THANKS', 'FOR', 'VISITING'];
+  let currentWordIdx = 0;
+
+  function buildWordCells(word, gridW, gridH) {
+    const letterW = 5, letterH = 7, gap = 2;
+    const totalW = (letterW * word.length) + (gap * (word.length - 1));
+    const startCol = Math.floor((gridW - totalW) / 2);
+    const startRow = Math.floor((gridH - letterH) / 2);
+    const lit = new Set();
+    
+    word.split('').forEach((ch, li) => {
+      const offC = startCol + li * (letterW + gap);
+      if (GLYPHS[ch]) {
+        GLYPHS[ch].forEach((row, r) => {
+          row.forEach((px, c) => {
+            if (px) lit.add(`${offC + c},${startRow + r}`);
+          });
+        });
+      }
+    });
+    return lit;
+  }
+
+  const ASCII_CHARS = '01アイウエオカキクケコABCDEFRX#@%&'.split('');
+  const CELL = 18; 
+  let cols, rows, cells, litSet;
+  let phase = 1; 
+  let phaseTimer = 0;
+  const CHAOS_DUR    = 120;
+  const CONVERGE_DUR = 120;
+  const FORMED_DUR   = 300;
+  const EXPLODE_DUR  = 60;
+
+  function resize() {
+    ac.width  = ac.offsetWidth;
+    ac.height = ac.offsetHeight;
+    cols = Math.floor(ac.width  / CELL);
+    rows = Math.floor(ac.height / CELL);
+    litSet = buildWordCells(wordsToCycle[currentWordIdx], cols, rows);
+    initCells();
+  }
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function pick(arr)  { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function initCells() {
+    cells = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const isLit = litSet.has(`${c},${r}`);
+        cells.push({
+          c, r,
+          x: rnd(0, ac.width),
+          y: rnd(0, ac.height),
+          hx: c * CELL + CELL / 2,
+          hy: r * CELL + CELL / 2,
+          char: pick(ASCII_CHARS),
+          charTimer: Math.floor(rnd(0, 20)),
+          targetAlpha: isLit ? 1.0 : 0.08,
+          alpha: Math.random(),
+          isLit,
+          vx: 0, vy: 0,
+          scale: rnd(0.5, 1.2),
+          mutRate: isLit ? 0.015 : 0.06,
+        });
+      }
+    }
+  }
+
+  let frameId;
+  function draw() {
+    frameId = requestAnimationFrame(draw);
+    ax.clearRect(0, 0, ac.width, ac.height);
+
+    phaseTimer++;
+    const phaseDurs = [CHAOS_DUR, CONVERGE_DUR, FORMED_DUR, EXPLODE_DUR];
+    
+    if (phaseTimer > phaseDurs[phase]) {
+      phaseTimer = 0;
+      phase = (phase + 1) % 4;
+      
+      if (phase === 3) {
+        cells.forEach(cell => {
+          if (cell.isLit) {
+            const angle = rnd(0, Math.PI * 2);
+            const speed = rnd(4, 18);
+            cell.vx = Math.cos(angle) * speed;
+            cell.vy = Math.sin(angle) * speed;
+          }
+        });
+      }
+      
+      if (phase === 0) {
+        currentWordIdx = (currentWordIdx + 1) % wordsToCycle.length;
+        litSet = buildWordCells(wordsToCycle[currentWordIdx], cols, rows);
+
+        cells.forEach(cell => {
+          cell.isLit = litSet.has(`${cell.c},${cell.r}`);
+          cell.targetAlpha = cell.isLit ? 1.0 : 0.08;
+          cell.mutRate = cell.isLit ? 0.015 : 0.06;
+          cell.x = rnd(0, ac.width);
+          cell.y = rnd(0, ac.height);
+          cell.vx = 0; cell.vy = 0;
+        });
+      }
+    }
+
+    const t  = phaseTimer / phaseDurs[phase];
+    const accent = getThemeRgb();
+    ax.font = `bold ${CELL - 2}px "Space Mono", monospace`;
+    ax.textAlign = 'center';
+    ax.textBaseline = 'middle';
+
+    cells.forEach(cell => {
+      if (phase === 0) {
+        cell.x += Math.sin(phaseTimer * 0.03 + cell.c) * 0.4;
+        cell.y += Math.cos(phaseTimer * 0.03 + cell.r) * 0.4;
+        if (cell.x < 0) cell.x = ac.width;
+        if (cell.x > ac.width) cell.x = 0;
+        if (cell.y < 0) cell.y = ac.height;
+        if (cell.y > ac.height) cell.y = 0;
+      } else if (phase === 1) {
+        cell.x += (cell.hx - cell.x) * (0.04 + t * 0.06);
+        cell.y += (cell.hy - cell.y) * (0.04 + t * 0.06);
+      } else if (phase === 2) {
+        cell.x = cell.hx + Math.sin(phaseTimer * 0.05 + cell.c * 0.7) * 0.8;
+        cell.y = cell.hy + Math.cos(phaseTimer * 0.05 + cell.r * 0.7) * 0.8;
+      } else if (phase === 3) {
+        cell.vx *= 0.93;
+        cell.vy *= 0.93;
+        cell.x += cell.vx;
+        cell.y += cell.vy;
+      }
+
+      cell.charTimer--;
+      if (cell.charTimer <= 0) {
+        cell.char = pick(ASCII_CHARS);
+        cell.charTimer = Math.floor(rnd(8, 35));
+        if (phase === 2 && cell.isLit) cell.charTimer = Math.floor(rnd(40, 90));
+      }
+
+      let targetA = cell.targetAlpha;
+      if (phase === 3 && cell.isLit) targetA = 1 - t;
+      if (phase === 0 && !cell.isLit) targetA = 0.05 + Math.sin(phaseTimer * 0.04 + cell.c) * 0.04;
+      cell.alpha += (targetA - cell.alpha) * 0.08;
+
+      if (cell.alpha < 0.01) return;
+
+      let color;
+      if (cell.isLit) {
+        color = `rgba(${accent.r},${accent.g},${accent.b},${cell.alpha.toFixed(3)})`;
+      } else {
+        color = `rgba(255,255,255,${(cell.alpha * 0.5).toFixed(3)})`;
+      }
+
+      ax.fillStyle = color;
+      ax.save();
+      ax.translate(cell.x, cell.y);
+      ax.fillText(cell.char, 0, 0);
+      ax.restore();
+    });
+  }
+
+  const section = ac.closest('section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        resize();
+        draw();
+      } else {
+        cancelAnimationFrame(frameId);
+      }
+    });
+  }, { threshold: 0.05 });
+  observer.observe(section);
+
+  window.addEventListener('resize', () => {
+    if (ac.offsetParent !== null) resize();
+  });
+})();

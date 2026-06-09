@@ -50,12 +50,12 @@
   
     <div id="sys-config-dropdown" class="sys-config-panel hidden">
       <div class="control-group">
-        <label for="speed-slider">RADIUS: <span id="speed-val">150</span></label>
-        <input type="range" id="speed-slider" min="50" max="400" step="10" value="150">
+        <label for="speed-slider">SPEED: <span id="speed-val">1.0</span></label>
+        <input type="range" id="speed-slider" min="0.1" max="3.0" step="0.1" value="1.0">
       </div>
       <div class="control-group">
-        <label for="density-slider">FONT_SIZE: <span id="density-val">14</span></label>
-        <input type="range" id="density-slider" min="8" max="40" step="1" value="14">
+        <label for="density-slider">NODES: <span id="density-val">100</span></label>
+        <input type="range" id="density-slider" min="30" max="250" step="10" value="100">
       </div>
       <div class="control-group">
         <label for="color-picker">THEME_HEX:</label>
@@ -83,7 +83,7 @@
       <div class="about-body">
         <div class="about-bio gsap-reveal-up">
           <p class="about-lead">Hey!<br><span class="accent-text">ITS NICE SEEING YOU</span></p>
-          <p class="about-sub">Computer Science Honors and Data Science double major at Purdue University. I’ve been coding for several years and am continuously learning new technologies across the stack. I build full stack applications and work with cloud systems, APIs, and everything in between to take ideas from concept to reality.<br><br>This past summer, I interned as a Software Engineering Intern at General Dynamics Information Technology, where I gained experience with the software development lifecycle in a large enterprise environment and worked on a real world production system.<br><br>Check out some of my work below!</p>
+          <p class="about-sub">Computer Science Honors and Data Science double major at Purdue University. I’ve been coding for several years and am continuously learning new technologies across the stack. I build full stack applications and work with cloud systems, APIs, and everything in between!<br><br>This past summer, I interned as a Software Engineering Intern at General Dynamics Information Technology, where I gained experience with the software development lifecycle in a large enterprise environment and worked on a real world production system.<br><br>Check out some of my work below!</p>
         </div>
 
         <div class="about-stats">
@@ -117,6 +117,9 @@
         <span class="skill-tag">ML / AI</span>
         <span class="skill-tag">GSAP</span>
         <span class="skill-tag">Google App Scripts</span>
+        <span class="skill-tag">Unity</span>
+        <span class="skill-tag">NumPy</span>
+        <span class="skill-tag">Pandas</span>
       </div>
     </section>
 
@@ -229,6 +232,11 @@
           <span class="contact-email-line"></span>
         </a>
       </div>
+    </section>
+
+    <section class="ascii-art-section">
+      <canvas id="ascii-canvas"></canvas>
+    </section>
 
   </main>
 
