@@ -83,7 +83,7 @@
       <div class="about-body">
         <div class="about-bio gsap-reveal-up">
           <p class="about-lead">Hey!<br><span class="accent-text">ITS NICE SEEING YOU</span></p>
-          <p class="about-sub">Computer Science Honors and Data Science double major at Purdue University. I’ve been coding for several years and am continuously learning new technologies across the stack. I build full stack applications and work with cloud systems, APIs, and everything in between!<br><br>This past summer, I interned as a Software Engineering Intern at General Dynamics Information Technology, where I gained experience with the software development lifecycle in a large enterprise environment and worked on a real world production system.<br><br>Check out some of my work below!</p>
+          <p class="about-sub">Computer Science Honors and Data Science double major at Purdue University. I've been coding for several years and am continuously learning new technologies across the stack. I build full stack applications and work with cloud systems, APIs, and everything in between!<br><br>This past summer, I interned as a Software Engineering Intern at General Dynamics Information Technology, where I gained experience with the software development lifecycle in a large enterprise environment and worked on a real world production system.<br><br>Check out some of my work below!</p>
         </div>
 
         <div class="about-stats">
@@ -123,6 +123,9 @@
       </div>
     </section>
 
+    <!-- ═══════════════════════════════════════════════
+         WORK & CERTS SECTION
+    ════════════════════════════════════════════════ -->
     <section id="projects" class="content-section work-section">
       <div class="work-header">
         <h2 class="gsap-reveal section-label">WORK & CERTS</h2>
@@ -130,87 +133,108 @@
       </div>
 
       <div class="work-list" id="work-list">
-        
+
+        <!-- 03 · THIS PORTFOLIO -->
         <div class="work-container">
           <a href="#" class="work-item" data-index="01">
             <span class="work-item-index">01</span>
-            <span class="work-item-title">CLOUD RESUME CHALLENGE</span>
-            <span class="work-item-tags">AWS · SERVERLESS · API</span>
+            <span class="work-item-title">This Portfolio</span>
+            <span class="work-item-tags">AWS · TERRAFORM · CI/CD</span>
             <span class="work-item-arrow">→</span>
           </a>
           <div class="work-details">
             <div class="work-details-inner">
               <div class="work-details-content">
-                <p>Architected a serverless portfolio utilizing AWS S3, CloudFront, Lambda, and DynamoDB. Implemented backend infrastructure as code via Terraform, bridging the gap between raw infrastructure and continuous deployment.</p>
-                <a href="#" class="detail-link">VIEW ARCHITECTURE</a>
+                <p>A fully serverless portfolio deployed on AWS where the static site is hosted on S3 and distributed globally via CloudFront with HTTPS through ACM. A live visitor counter is powered by a Python Lambda function, connected through API Gateway, and backed by a DynamoDB table. All infrastructure is provisioned as code using Terraform, with zero touch deployments automated through a GitHub Actions CI/CD pipeline that syncs the frontend to S3 and invalidates the CloudFront cache on every push to main.</p>
+                <a href="https://github.com/aramesh129/ashvath-cloud-resume.git" target="_blank" class="detail-link">VIEW GITHUB</a>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- 04 · BILINGUAL SERVICE WEBSITE -->
         <div class="work-container">
           <a href="#" class="work-item" data-index="02">
             <span class="work-item-index">02</span>
-            <span class="work-item-title">AIRBEATS</span>
-            <span class="work-item-tags">TENSORFLOW.JS · GESTURE REC</span>
+            <span class="work-item-title">Bilingual Service Website</span>
+            <span class="work-item-tags">GOOGLE APP SCRIPTS · REAL CLIENT</span>
             <span class="work-item-arrow">→</span>
           </a>
           <div class="work-details">
             <div class="work-details-inner">
               <div class="work-details-content">
-                <p>Developed an interactive music platform for the AirBeats Hackathon. Built using TensorFlow.js to process and map real-time human gesture recognition to synthesized audio outputs.</p>
-                <a href="#" class="detail-link">VIEW GITHUB</a>
+                <p>Built and launched a full scale booking platform for RN Luxury Couture, a local business in my colleges town that was previously managing all appointments through Facebook DMs. Engineered an automated appointment system using Google Apps Script to synchronize form submissions directly with Google Calendar and fire automated email confirmations to clients and the business owner. Implemented a custom English/Spanish language toggle to serve the company's primary Hispanic customer base. Collaborated directly with the owners through multiple meetings to refine UI/UX and meet their exact business needs. The platform has since facilitated hundreds of real booked appointments.</p>
+                <a href="https://script.google.com/macros/s/AKfycbz_1cIXc8o54hb-aV1ndD2vRZ7VAoksG4NPlVpQcne36kgpYYuUxRzTpX-8WtI72tUQLQ/exec?page=index" target="_blank" class="detail-link">VIEW LIVE SITE</a>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- 05 · GAME DEVELOPMENT -->
         <div class="work-container">
           <a href="#" class="work-item" data-index="03">
             <span class="work-item-index">03</span>
-            <span class="work-item-title">TICKET MANAGEMENT SYSTEM</span>
-            <span class="work-item-tags">JAVA · SWING · SOCKETS</span>
+            <span class="work-item-title">Game Development Projects</span>
+            <span class="work-item-tags">UNITY · C# · 9K+ DOWNLOADS</span>
             <span class="work-item-arrow">→</span>
           </a>
           <div class="work-details">
             <div class="work-details-inner">
               <div class="work-details-content">
-                <p>Engineered a full-stack Java application featuring a multi-threaded server architecture. Implemented synchronized client-server communication using Sockets and mapped data to a comprehensive Swing-based GUI.</p>
-                <a href="#" class="detail-link">VIEW REPO</a>
+                <p>Developed, coded, and self-published 5 independent games using C# in the Unity engine handling the full development lifecycle for each: concept design, level design, asset integration, physics simulations, UI systems, testing, debugging, and multi platform deployment. Accumulated 9,000+ downloads across all titles. My favorite is Rocket Cowboy, my most popular game and the one I had the most fun building its a fast-paced, physics driven project that captures everything I love about game development. Hit the button below to play it and check out my other games.</p>
+                <a href="https://fudge123.itch.io/rocket-cowboy" target="_blank" class="detail-link">PLAY ROCKET COWBOY</a>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- 06 · TICKET MANAGEMENT SYSTEM -->
         <div class="work-container">
           <a href="#" class="work-item" data-index="04">
             <span class="work-item-index">04</span>
-            <span class="work-item-title">INDEPENDENT GAMES</span>
-            <span class="work-item-tags">UNITY · C#</span>
+            <span class="work-item-title">Ticket Management System</span>
+            <span class="work-item-tags">JAVA · SOCKETS · SWING · MULTI-THREADING</span>
             <span class="work-item-arrow">→</span>
           </a>
           <div class="work-details">
             <div class="work-details-inner">
               <div class="work-details-content">
-                <p>Designed, programmed, and self-published five distinct independent video games utilizing the Unity engine and C# scripting over a dedicated two-year development period.</p>
-                <a href="#" class="detail-link">PLAY DEMOS</a>
+                <p>Full-stack Java application for event browsing, seat selection, and transactions. Engineered a synchronized Socket protocol for real time data exchange between the client GUI and a multi-threaded server. Implemented admin features for dynamic pricing, section locking, and store hour management. Designed a complete Java Swing GUI supporting seat mapping, account funds management, and core user workflows.</p>
+                <a href="https://github.com/aramesh129/Ticket_Managment" target="_blank" class="detail-link">VIEW REPO</a>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- 01 · AWS CCP CERT -->
         <div class="work-container">
           <a href="#" class="work-item" data-index="05">
             <span class="work-item-index">05</span>
-            <span class="work-item-title">SUDOKU SOLVER</span>
-            <span class="work-item-tags">JAVA · ALGORITHMS</span>
+            <span class="work-item-title">AWS Certified Cloud Practitioner</span>
+            <span class="work-item-tags">CERT · AWS</span>
             <span class="work-item-arrow">→</span>
           </a>
           <div class="work-details">
             <div class="work-details-inner">
               <div class="work-details-content">
-                <p>Implemented a highly optimized recursive backtracking algorithm in Java capable of parsing and instantly computing solutions for standard 9x9 Sudoku matrices.</p>
-                <a href="#" class="detail-link">VIEW CODE</a>
+                <a href="AWS_Certified_Cloud_Practitioner_certificate.pdf" target="_blank" class="detail-link">VIEW CERTIFICATE</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 · GOOGLE DATA ANALYTICS CERT -->
+        <div class="work-container">
+          <a href="#" class="work-item" data-index="06">
+            <span class="work-item-index">06</span>
+            <span class="work-item-title">Google Data Analytics</span>
+            <span class="work-item-tags">CERT · GOOGLE</span>
+            <span class="work-item-arrow">→</span>
+          </a>
+          <div class="work-details">
+            <div class="work-details-inner">
+              <div class="work-details-content">
+                <a href="Google_Data_Analytics_certificate.pdf" target="_blank" class="detail-link">VIEW CERTIFICATE</a>
               </div>
             </div>
           </div>
