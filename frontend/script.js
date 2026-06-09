@@ -594,3 +594,49 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
     if (ac.offsetParent !== null) resize();
   });
 })();
+// ═══════════════════════════════════════════════════════
+// VISITOR COUNTER
+// Replace YOUR_API_ENDPOINT with your API Gateway URL
+// after completing the AWS backend setup.
+// e.g. https://abc123.execute-api.us-east-1.amazonaws.com/prod/count
+// ═══════════════════════════════════════════════════════
+
+const VISITOR_API = "YOUR_API_ENDPOINT";
+
+async function updateVisitorCount() {
+  if (!VISITOR_API || VISITOR_API === "YOUR_API_ENDPOINT") return;
+
+  try {
+    const res = await fetch(VISITOR_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) throw new Error("non-2xx response");
+
+    const data = await res.json();
+    const el = document.getElementById("visitor-count");
+    if (el && data.count !== undefined) {
+      // Animate the number ticking up from current to new value
+      const start = parseInt(el.textContent) || 0;
+      const end   = data.count;
+      const dur   = 800;
+      const t0    = performance.now();
+
+      function tick(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(start + (end - start) * eased);
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = end;
+      }
+      requestAnimationFrame(tick);
+    }
+  } catch (err) {
+    // Silently fail — never let counter errors break the page
+    const el = document.getElementById("visitor-count");
+    if (el) el.textContent = "—";
+  }
+}
+
+updateVisitorCount();

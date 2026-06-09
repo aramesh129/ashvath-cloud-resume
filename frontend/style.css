@@ -639,3 +639,137 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   transform: translateY(0%);
   will-change: transform;
 }
+/* ═══════════════════════════════════════════
+   VISITOR COUNTER (nav)
+════════════════════════════════════════════ */
+.nav-visitor-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.45);
+  padding: 0 1rem;
+  border-left: 1px solid var(--text-muted);
+  border-right: 1px solid var(--text-muted);
+  height: 100%;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+}
+
+.visitor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  animation: dot-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT SOCIALS
+════════════════════════════════════════════ */
+.contact-socials {
+  display: flex;
+  gap: 3rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--text-muted);
+}
+
+.contact-social-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: color 0.25s ease;
+}
+
+.contact-social-item svg {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.contact-social-item:hover {
+  color: var(--accent);
+}
+
+.contact-social-item:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ═══════════════════════════════════════════
+   RESUME DOWNLOAD BUTTON
+════════════════════════════════════════════ */
+.contact-resume {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--text-muted);
+  display: flex;
+  justify-content: center;
+}
+
+.resume-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  border: 1px solid var(--text-muted);
+  padding: 1.25rem 3rem;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+
+.resume-download-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 0;
+}
+
+.resume-download-btn:hover::before {
+  transform: scaleX(1);
+}
+
+.resume-download-btn:hover {
+  color: var(--bg-color);
+  border-color: var(--accent);
+}
+
+.resume-download-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.resume-btn-arrow {
+  font-size: 1.4rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.resume-download-btn:hover .resume-btn-arrow {
+  transform: translateY(3px);
+}
