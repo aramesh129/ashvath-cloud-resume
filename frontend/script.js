@@ -601,7 +601,7 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
 // e.g. https://abc123.execute-api.us-east-1.amazonaws.com/prod/count
 // ═══════════════════════════════════════════════════════
 
-const VISITOR_API = "YOUR_API_ENDPOINT";
+const VISITOR_API = "https://3fc7yk7ana.execute-api.us-east-1.amazonaws.com/prod/count";
 
 async function updateVisitorCount() {
   if (!VISITOR_API || VISITOR_API === "YOUR_API_ENDPOINT") return;
