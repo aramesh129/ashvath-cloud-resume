@@ -654,7 +654,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   user-select: none;
   height: 100%;
   border-left: 1px solid var(--text-muted);
-  border-right: 1px solid var(--text-muted);
 }
 
 .visitor-dot { display: none; }
@@ -662,7 +661,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .visitor-label {
   font-size: 0.45rem;
   letter-spacing: 3px;
-  color: rgba(255,255,255,0.3);
+  color: #ffffff;
   text-transform: uppercase;
   line-height: 1;
 }
@@ -673,6 +672,14 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -1px;
+  line-height: 1;
+}
+
+.visitor-powered {
+  font-size: 0.3rem;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
   line-height: 1;
 }
 
