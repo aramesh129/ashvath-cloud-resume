@@ -663,17 +663,17 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 
 #visitor-count {
   font-family: 'Syne', sans-serif;
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  color: #ffffff;
+  color: rgba(255,255,255,0.4);
   letter-spacing: -1px;
   line-height: 1;
 }
 
 .visitor-powered {
-  font-size: 0.55rem;
+  font-size: 1rem;
   letter-spacing: 2.5px;
-  color: rgba(255,255,255,0.4);
+  color: #ffffff;
   text-transform: uppercase;
   line-height: 1;
 }
