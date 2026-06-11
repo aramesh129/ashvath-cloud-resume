@@ -1,0 +1,17 @@
+# Terraform
+infrastructure/.terraform/
+infrastructure/infrastructure/
+infrastructure/terraform.tfstate
+infrastructure/terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+
+# AWS temp files
+bucket-policy.json
+dynamo-policy.json
+trust-policy.json
+item.json
+response.json
+
+# Lambda zip
+backend/function.zip
