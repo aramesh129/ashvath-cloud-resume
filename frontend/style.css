@@ -88,14 +88,8 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
 .cursor { color: var(--accent); animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-.nav-segment {
-  justify-content: space-between !important;
-}
-
-#centered-nav {
-  justify-content: center;
-  flex: 1;
-}
+.nav-segment { grid-column: 3; justify-content: center; }
+#centered-nav { display: flex; align-items: center; height: 100%; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
 
 #centered-nav a { 
   color: var(--text-primary); 
@@ -660,8 +654,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   user-select: none;
   height: 100%;
   border-left: 1px solid var(--text-muted);
-  border-right: 1px solid var(--text-muted);
-  margin-left: auto;
 }
 
 .visitor-dot { display: none; }
