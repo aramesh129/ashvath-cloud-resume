@@ -654,6 +654,8 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   user-select: none;
   height: 100%;
   border-left: 1px solid var(--text-muted);
+  border-left: none !important;
+  border-right: none !important;
 }
 
 .visitor-dot { display: none; }
