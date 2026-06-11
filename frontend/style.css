@@ -88,8 +88,14 @@ body { background-color: var(--bg-color); color: var(--text-primary); font-famil
 .cursor { color: var(--accent); animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-.nav-segment { grid-column: 3; justify-content: center; }
-#centered-nav { display: flex; align-items: center; height: 100%; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
+.nav-segment {
+  justify-content: space-between !important;
+}
+
+#centered-nav {
+  justify-content: center;
+  flex: 1;
+}
 
 #centered-nav a { 
   color: var(--text-primary); 
