@@ -661,7 +661,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .visitor-label {
   font-size: 0.45rem;
   letter-spacing: 3px;
-  color: rgba(255,255,255,0.5);
+  color: #ffffff;
   text-transform: uppercase;
   line-height: 1;
 }
@@ -678,7 +678,7 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .visitor-powered {
   font-size: 0.4rem;
   letter-spacing: 2.5px;
-  color: rgba(255,255,255,0.35);
+  color: #ffffff;
   text-transform: uppercase;
   line-height: 1;
 }
