@@ -639,4 +639,10 @@ async function updateVisitorCount() {
   }
 }
 
+colorPicker.addEventListener('input', (e) => {
+  document.documentElement.style.setProperty('--accent', e.target.value);
+  // visitor count inherits --accent via CSS, no extra work needed
+});
+
 updateVisitorCount();
+
