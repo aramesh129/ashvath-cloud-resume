@@ -642,13 +642,14 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 /* ═══════════════════════════════════════════
    VISITOR COUNTER (nav)
 ════════════════════════════════════════════ */
-.nav-visitor-count {
+
+css.nav-visitor-count {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
-  padding: 0 3rem;
+  gap: 0.25rem;
+  width: 100%;
   white-space: nowrap;
   cursor: default;
   user-select: none;
@@ -658,29 +659,33 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 
 .visitor-dot { display: none; }
 
-.visitor-label {
-  font-size: 0.45rem;
-  letter-spacing: 3px;
-  color: #ffffff;
-  text-transform: uppercase;
-  line-height: 1;
+.visitor-label { display: none; }
+
+#visitor-count::before {
+  content: 'VISITS: ';
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 2px;
 }
 
 #visitor-count {
   font-family: 'Syne', sans-serif;
-  font-size: 1.2rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: var(--text-primary);
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   line-height: 1;
 }
 
 .visitor-powered {
-  font-size: 0.4rem;
+  font-size: 0.45rem;
   letter-spacing: 2.5px;
-  color: #ffffff;
+  color: rgba(255,255,255,0.3);
   text-transform: uppercase;
   line-height: 1;
+  text-align: center;
 }
 
 /* ═══════════════════════════════════════════
