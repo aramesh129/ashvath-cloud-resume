@@ -644,18 +644,15 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 ════════════════════════════════════════════ */
 .nav-visitor-count {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.35);
-  padding: 0 1.25rem;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0 1.5rem;
   white-space: nowrap;
   cursor: default;
   user-select: none;
   height: 100%;
-  align-self: center;
-  text-transform: uppercase;
   border-left: 1px solid var(--text-muted);
   border-right: 1px solid var(--text-muted);
 }
@@ -663,17 +660,20 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 .visitor-dot { display: none; }
 
 .visitor-label {
-  font-size: 0.6rem;
-  letter-spacing: 2px;
+  font-size: 0.45rem;
+  letter-spacing: 3px;
   color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 #visitor-count {
   font-family: 'Syne', sans-serif;
-  font-size: 0.95rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: var(--accent);
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  line-height: 1;
 }
 
 /* ═══════════════════════════════════════════
