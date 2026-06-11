@@ -644,36 +644,43 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 ════════════════════════════════════════════ */
 .nav-visitor-count {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.65rem;
+  justify-content: center;
+  gap: 0.1rem;
+  font-size: 0.55rem;
   letter-spacing: 2px;
-  color: rgba(255,255,255,0.45);
-  padding: 0.25rem 0.75rem;
+  color: rgba(255,255,255,0.35);
+  padding: 0.35rem 0.9rem;
   border: 1px solid var(--text-muted);
-  border-radius: 100px;
   white-space: nowrap;
   cursor: default;
   user-select: none;
   height: auto;
   align-self: center;
+  line-height: 1.2;
 }
  
 .visitor-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: inline-block;
-  animation: dot-pulse 2s ease-in-out infinite;
-  flex-shrink: 0;
+  display: none;
 }
  
-@keyframes dot-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.7); }
+#visitor-count {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  line-height: 1;
 }
  
+.nav-visitor-count::after {
+  content: 'λ POWERED';
+  font-size: 0.45rem;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+}
 
 /* ═══════════════════════════════════════════
    CONTACT SOCIALS
@@ -774,4 +781,11 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
 
 .resume-download-btn:hover .resume-btn-arrow {
   transform: translateY(3px);
+}
+
+.visitor-label {
+  font-size: 0.45rem;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
 }
