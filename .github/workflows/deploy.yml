@@ -46,7 +46,7 @@ jobs:
       - name: Deploy Lambda
         run: |
           cd backend
-          zip function.zip lambda_function.py
+          zip -j function.zip lambda_function.py
           aws lambda update-function-code \
             --function-name cloud-resume-counter \
             --zip-file fileb://function.zip \
