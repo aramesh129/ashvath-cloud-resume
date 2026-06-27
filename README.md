@@ -65,7 +65,7 @@ ashvath-cloud-resume/
 The site is a static HTML/CSS/JS portfolio hosted in an S3 bucket and served globally through CloudFront with HTTPS via ACM. On every page load, JavaScript makes a `POST` request to the API Gateway endpoint.
 
 ### Visitor Counter
-The API Gateway triggers a Python Lambda function that runs an atomic `UpdateItem` on a DynamoDB table which increments the visitor count and returns the new value. The count is displayed live in the navigation bar.
+The API Gateway triggers a Python Lambda function that runs an atomic `UpdateItem` on a DynamoDB table which increments the visitor count and returns the new value. The total count is displayed live in the navigation bar.
 
 ### Infrastructure as Code
 All AWS resources including S3, CloudFront, Lambda, API Gateway, DynamoDB, and IAM roles are provisioned using Terraform. The entire stack can be recreated from  with a single `terraform apply`.
