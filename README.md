@@ -30,7 +30,7 @@ Every infrastructure resource is defined as code in Terraform and deployed autom
 | Static Hosting | S3 |
 | API | API Gateway (HTTP API v2) |
 | Compute | Lambda (Python 3.12) |
-| Database | DynamoDB (PAY_PER_REQUEST) |
+| Database | DynamoDB |
 | IaC | Terraform |
 | CI/CD | GitHub Actions |
 | Frontend | HTML, CSS, JavaScript, GSAP |
