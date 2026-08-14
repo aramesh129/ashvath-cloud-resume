@@ -594,12 +594,6 @@ gsap.utils.toArray('.contact-section .gsap-reveal-up').forEach((el, i) => {
     if (ac.offsetParent !== null) resize();
   });
 })();
-// ═══════════════════════════════════════════════════════
-// VISITOR COUNTER
-// Replace YOUR_API_ENDPOINT with your API Gateway URL
-// after completing the AWS backend setup.
-// e.g. https://abc123.execute-api.us-east-1.amazonaws.com/prod/count
-// ═══════════════════════════════════════════════════════
 
 const VISITOR_API = "https://3fc7yk7ana.execute-api.us-east-1.amazonaws.com/prod/count";
 
@@ -633,7 +627,6 @@ async function updateVisitorCount() {
       requestAnimationFrame(tick);
     }
   } catch (err) {
-    // Silently fail — never let counter errors break the page
     const el = document.getElementById("visitor-count");
     if (el) el.textContent = "—";
   }
