@@ -679,10 +679,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   text-transform: uppercase;
   line-height: 1;
 }
-
-/* ═══════════════════════════════════════════
-   CONTACT SOCIALS
-════════════════════════════════════════════ */
 .contact-socials {
   display: flex;
   gap: 3rem;
@@ -717,9 +713,6 @@ h1 { font-family: 'Syne', sans-serif; font-size: clamp(4rem, 12vw, 15rem); line-
   transform: translate(2px, -2px);
 }
 
-/* ═══════════════════════════════════════════
-   RESUME DOWNLOAD BUTTON
-════════════════════════════════════════════ */
 .contact-resume {
   margin-top: 3rem;
   padding-top: 3rem;
