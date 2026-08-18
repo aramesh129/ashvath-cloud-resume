@@ -14,7 +14,7 @@ Browser
         └─→ S3 (Static site hosting)
               └─→ JavaScript fetch() on page load
                     └─→ API Gateway (HTTP API)
-                          └─→ Lambda (Python 3.12)
+                          └─→ Lambda (Python)
                                 └─→ DynamoDB (visitor count)
 ```
 
